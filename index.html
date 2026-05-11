@@ -1059,18 +1059,25 @@
   const hamburger = document.getElementById('hamburger');
   const mMenu = document.getElementById('mMenu');
   const mScrim = document.getElementById('mScrim');
+
+  const menuFocusable = () => [...mMenu.querySelectorAll('a, button')];
+
   const closeMenu = () => {
     mMenu.classList.remove('open');
     mScrim.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
     mMenu.setAttribute('aria-hidden', 'true');
+    hamburger.focus();
   };
   const openMenu = () => {
     mMenu.classList.add('open');
     mScrim.classList.add('open');
     hamburger.setAttribute('aria-expanded', 'true');
     mMenu.setAttribute('aria-hidden', 'false');
+    const focusable = menuFocusable();
+    if (focusable.length) focusable[0].focus();
   };
+
   hamburger.addEventListener('click', () => {
     if (mMenu.classList.contains('open')) closeMenu();
     else openMenu();
@@ -1078,6 +1085,24 @@
   mScrim.addEventListener('click', closeMenu);
   mMenu.querySelectorAll('a, .mm-cta').forEach(el => {
     el.addEventListener('click', closeMenu);
+  });
+
+  // Focus trap
+  mMenu.addEventListener('keydown', (e) => {
+    if (!mMenu.classList.contains('open')) return;
+    const els = menuFocusable();
+    const first = els[0];
+    const last = els[els.length - 1];
+    if (e.key === 'Tab') {
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+    if (e.key === 'Escape') closeMenu();
   });
 
   // Sticky side-nav active state
