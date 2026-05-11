@@ -1113,7 +1113,9 @@
   sideLinks.forEach(a => {
     a.addEventListener('click', () => {
       const t = document.getElementById(a.dataset.target);
-      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (!t) return;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
     });
   });
   const setActive = () => {
