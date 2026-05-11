@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="color-scheme" content="light" />
 <title>Retinal — Never miss a job</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
 <style>
   :root {
+    color-scheme: light;
     --bg: #f9f8f6;
     --ink: #0f0f0e;
     --accent: #3d6fd4;
@@ -37,6 +39,7 @@
   /* ---------- Page frame (technical-drawing border) ---------- */
   .page-frame {
     position: fixed; inset: 0;
+    top: env(safe-area-inset-top);
     pointer-events: none;
     z-index: 60;
   }
@@ -59,12 +62,35 @@
 
   a { color: inherit; text-decoration: none; }
 
+  button, a { -webkit-tap-highlight-color: transparent; }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .nav-links a:focus-visible {
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+  .nav-cta:focus-visible {
+    outline-offset: 5px;
+    border-radius: 4px;
+  }
+  .btn:focus-visible {
+    outline-offset: 2px;
+  }
+  .faq summary:focus-visible {
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
   /* ---------- Nav ---------- */
   .nav {
     position: sticky; top: 0; z-index: 55;
     background: var(--bg);
     display: flex; align-items: stretch;
-    padding: 0;
+    padding: env(safe-area-inset-top) 0 0;
     border-bottom: 1px solid var(--ink);
   }
   .logo {
@@ -252,6 +278,19 @@
   @media (min-width: 1024px) {
     .side-nav { display: flex; }
   }
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 9999;
+    transition: top .2s;
+  }
+  .skip-link:focus { top: 0; }
   .btn {
     font-family: inherit;
     font-size: 11px; font-weight: 500;
@@ -599,7 +638,7 @@
 
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
-    .nav { padding: 16px 20px; }
+    .nav { padding: env(safe-area-inset-top) 20px 0; }
     .section { padding: 64px 24px; }
     .hero { padding: 32px 24px 80px; }
     .hero-meta { display: none; }
@@ -622,16 +661,33 @@
   @media (min-width: 769px) {
     .mobile-menu, .mobile-scrim { display: none; }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .mobile-menu {
+      transition: none;
+    }
+
+    .skip-link { transition: none; }
+  }
 </style>
 </head>
 <body>
 
+<a href="#top" class="skip-link">Skip to content</a>
 <div class="page-frame" aria-hidden="true"></div>
 
 <!-- ============ NAV ============ -->
 <nav class="nav" id="nav">
   <a href="#top" class="logo" aria-label="Retinal — Home">
-    <span class="logo-mark"><img src="retinal-logo.png" alt="Retinal" /></span>
+    <span class="logo-mark"><img src="retinal-logo.png" alt="Retinal" width="44" height="44" /></span>
   </a>
   <div class="nav-body">
     <span class="wordmark">Retinal</span>
@@ -922,17 +978,17 @@
 
     <div class="quotes reveal">
       <div class="quote">
-        <div class="quote-mark">"</div>
+        <div class="quote-mark" aria-hidden="true">"</div>
         <p>Picked up a £900 boiler swap I would have completely missed. Paid for itself in one morning.</p>
         <div class="who">Dave H.<small>Plumber · North London</small></div>
       </div>
       <div class="quote">
-        <div class="quote-mark">"</div>
+        <div class="quote-mark" aria-hidden="true">"</div>
         <p>It sounds like a person. My customers don't notice. I just get the WhatsApp and ring them back when I'm done.</p>
         <div class="who">Marcus T.<small>Electrician · Manchester</small></div>
       </div>
       <div class="quote">
-        <div class="quote-mark">"</div>
+        <div class="quote-mark" aria-hidden="true">"</div>
         <p>Setup took a phone call. Two days later it was live. I haven't lost a job to voicemail since.</p>
         <div class="who">Sam R.<small>Gas Engineer · Bristol</small></div>
       </div>
@@ -1045,18 +1101,25 @@
   const hamburger = document.getElementById('hamburger');
   const mMenu = document.getElementById('mMenu');
   const mScrim = document.getElementById('mScrim');
+
+  const menuFocusable = () => [...mMenu.querySelectorAll('a, button')];
+
   const closeMenu = () => {
     mMenu.classList.remove('open');
     mScrim.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
     mMenu.setAttribute('aria-hidden', 'true');
+    hamburger.focus();
   };
   const openMenu = () => {
     mMenu.classList.add('open');
     mScrim.classList.add('open');
     hamburger.setAttribute('aria-expanded', 'true');
     mMenu.setAttribute('aria-hidden', 'false');
+    const focusable = menuFocusable();
+    if (focusable.length) focusable[0].focus();
   };
+
   hamburger.addEventListener('click', () => {
     if (mMenu.classList.contains('open')) closeMenu();
     else openMenu();
@@ -1066,6 +1129,24 @@
     el.addEventListener('click', closeMenu);
   });
 
+  // Focus trap
+  mMenu.addEventListener('keydown', (e) => {
+    if (!mMenu.classList.contains('open')) return;
+    const els = menuFocusable();
+    const first = els[0];
+    const last = els[els.length - 1];
+    if (e.key === 'Tab') {
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+    if (e.key === 'Escape') closeMenu();
+  });
+
   // Sticky side-nav active state
   const sideNav = document.getElementById('sideNav');
   const sideLinks = sideNav.querySelectorAll('a');
@@ -1073,7 +1154,9 @@
   sideLinks.forEach(a => {
     a.addEventListener('click', () => {
       const t = document.getElementById(a.dataset.target);
-      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (!t) return;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
     });
   });
   const setActive = () => {
