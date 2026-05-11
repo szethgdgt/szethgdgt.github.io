@@ -16,6 +16,10 @@
     --muted: #888888;
     --rule: #e0ddd8;
     --ghost: #ede9e2;
+    --frame-left: 72px;
+  }
+  @media (max-width: 768px) {
+    :root { --frame-left: 56px; }
   }
 
   * { box-sizing: border-box; }
@@ -30,40 +34,224 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* ---------- Page frame (technical-drawing border) ---------- */
+  .page-frame {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 60;
+  }
+  .page-frame::before,
+  .page-frame::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--ink);
+  }
+  .page-frame::before { left: var(--frame-left); }
+  .page-frame::after  { right: 0; }
+  @media (max-width: 1279px) {
+    .page-frame::before,
+    .page-frame::after { display: none; }
+  }
+
   ::selection { background: var(--accent); color: #fff; }
 
   a { color: inherit; text-decoration: none; }
 
   /* ---------- Nav ---------- */
   .nav {
-    position: sticky; top: 0; z-index: 50;
+    position: sticky; top: 0; z-index: 55;
     background: var(--bg);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 22px 56px;
-    transition: border-color .2s ease;
-    border-bottom: 1px solid transparent;
+    display: flex; align-items: stretch;
+    padding: 0;
+    border-bottom: 1px solid var(--ink);
   }
-  .nav.scrolled { border-bottom: 1px solid var(--rule); }
   .logo {
-    font-weight: 700; letter-spacing: 0.12em; font-size: 14px;
-    text-transform: uppercase;
-    display: flex; align-items: center; gap: 10px;
+    width: var(--frame-left);
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    text-decoration: none;
   }
   .logo-mark {
-    width: 14px; height: 14px; border: 1.5px solid var(--ink);
-    border-radius: 50%;
-    position: relative;
+    width: 44px; height: 44px;
+    display: block;
   }
-  .logo-mark::after {
-    content: ""; position: absolute; inset: 3px;
-    background: var(--accent); border-radius: 50%;
+  .logo-mark img {
+    width: 100%; height: 100%; display: block; object-fit: contain;
+  }
+  .nav-body {
+    flex: 1;
+    display: flex; align-items: center;
+    padding: 18px 40px;
+    gap: 40px;
+  }
+  .wordmark {
+    font-weight: 700; letter-spacing: 0.18em;
+    font-size: 12px; text-transform: uppercase;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .nav-center {
+    display: flex; align-items: center;
+    gap: 40px;
+    flex: 1;
   }
   .nav-links {
-    display: flex; gap: 36px;
-    font-size: 13px; font-weight: 400; color: var(--body);
+    display: flex; align-items: center;
+    gap: 32px;
+    font-weight: 500;
   }
-  .nav-links a { transition: color .2s; }
-  .nav-links a:hover { color: var(--ink); }
+  .nav-links a {
+    display: inline-flex; align-items: baseline; gap: 8px;
+    font-size: 13px;
+    color: var(--ink);
+    transition: color .2s;
+    line-height: 1.1;
+  }
+  .nav-links a .num {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    position: relative; top: -6px;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover .num { color: var(--accent); }
+  .nav-cta {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: 13px; font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    background: none; border: 0; padding: 0;
+    font-family: inherit;
+  }
+  .nav-cta .arrow-btn {
+    width: 32px; height: 32px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background .2s, color .2s, transform .2s;
+  }
+  .nav-cta:hover .arrow-btn { background: var(--ink); color: #fff; transform: translateX(2px); }
+  .nav-cta svg { width: 12px; height: 12px; display: block; }
+
+  /* hamburger (mobile) */
+  .hamburger {
+    display: none;
+    width: 36px; height: 36px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    background: transparent;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  .hamburger span {
+    display: block;
+    width: 14px; height: 1px; background: var(--ink);
+    position: relative;
+  }
+  .hamburger span::before,
+  .hamburger span::after {
+    content: ""; position: absolute; left: 0;
+    width: 14px; height: 1px; background: var(--ink);
+  }
+  .hamburger span::before { top: -5px; }
+  .hamburger span::after  { top: 5px; }
+
+  /* mobile menu drawer */
+  .mobile-menu {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--ink);
+    z-index: 54;
+    transform: translateY(-100%);
+    transition: transform .35s cubic-bezier(.4,0,.2,1);
+    padding: 96px 24px 32px;
+  }
+  .mobile-menu.open { transform: translateY(0); }
+  .mobile-menu .mm-links {
+    display: flex; flex-direction: column;
+    border-top: 1px solid var(--rule);
+  }
+  .mobile-menu .mm-links a {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 22px; font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .mobile-menu .mm-links .num {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+  }
+  .mobile-menu .mm-cta {
+    margin-top: 28px;
+    display: block; width: 100%;
+    padding: 18px;
+    text-align: center;
+    background: var(--ink); color: #fff;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    border: 0;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .mobile-scrim {
+    position: fixed; inset: 0;
+    background: rgba(15,15,14,0.18);
+    z-index: 53;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s;
+  }
+  .mobile-scrim.open { opacity: 1; pointer-events: auto; }
+
+  /* ---------- Side nav indicator (desktop only) ---------- */
+  .side-nav {
+    position: fixed;
+    top: 50%;
+    right: 24px;
+    transform: translateY(-50%);
+    z-index: 40;
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    text-align: right;
+  }
+  .side-nav a {
+    display: inline-flex; align-items: center; justify-content: flex-end; gap: 12px;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.55;
+    transition: opacity .25s, color .25s;
+    cursor: pointer;
+  }
+  .side-nav a::after {
+    content: "";
+    display: inline-block;
+    width: 16px; height: 1px;
+    background: currentColor;
+    transition: width .25s, background .25s;
+  }
+  .side-nav a:hover { opacity: 1; color: var(--ink); }
+  .side-nav a.active {
+    color: var(--accent);
+    opacity: 1;
+  }
+  .side-nav a.active::after {
+    width: 28px;
+    background: var(--accent);
+  }
+  @media (min-width: 1024px) {
+    .side-nav { display: flex; }
+  }
   .btn {
     font-family: inherit;
     font-size: 11px; font-weight: 500;
@@ -198,7 +386,7 @@
   }
 
   /* ---------- Section 02 ROI ---------- */
-  .roi-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: end; margin-bottom: 64px; }
+  .roi-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; margin-bottom: 64px; }
   .roi-head .secnum { margin-bottom: 0; }
   .roi-head .body-col { max-width: 620px; }
   .stat-grid {
@@ -242,7 +430,7 @@
   .stat-cell.dark .stat-foot { color: rgba(255,255,255,0.4); }
 
   /* ---------- Section 03 How it works ---------- */
-  .hiw-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: end; margin-bottom: 80px; }
+  .hiw-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; margin-bottom: 80px; }
   .hiw-head .body-col { max-width: 640px; }
   .steps {
     display: grid; grid-template-columns: repeat(3, 1fr);
@@ -267,9 +455,15 @@
   }
 
   /* ---------- Pricing ---------- */
-  .price-head { text-align: center; margin-bottom: 64px; }
-  .price-head .secnum { margin: 0 auto 16px; }
-  .price-head .h2 { margin: 12px auto 0; max-width: 640px; }
+  .price-head {
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 56px; align-items: start;
+    margin-bottom: 64px;
+    text-align: left;
+  }
+  .price-head .secnum { margin: 0 0 16px; }
+  .price-head .body-col { max-width: 640px; }
+  .price-head .h2 { margin: 12px 0 0; max-width: 640px; }
   .price-head .eyebrow { display: block; margin-bottom: 0; }
   .price-card {
     max-width: 540px; margin: 0 auto;
@@ -337,7 +531,7 @@
   }
 
   /* ---------- FAQ ---------- */
-  .faq-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: end; margin-bottom: 56px; }
+  .faq-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; margin-bottom: 56px; }
   .faq { max-width: 880px; margin: 0 auto; border-top: 1px solid var(--rule); }
   .faq details {
     border-bottom: 1px solid var(--rule);
@@ -405,32 +599,86 @@
 
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
-    .nav { padding: 16px 24px; }
-    .nav-links { display: none; }
+    .nav { padding: 16px 20px; }
     .section { padding: 64px 24px; }
     .hero { padding: 32px 24px 80px; }
     .hero-meta { display: none; }
     .hero-h1 { font-size: clamp(40px, 9vw, 64px); }
-    .roi-head, .hiw-head, .faq-head { grid-template-columns: 1fr; gap: 16px; }
+    .roi-head, .hiw-head, .faq-head, .price-head { grid-template-columns: 1fr; gap: 16px; }
     .stat-grid { grid-template-columns: 1fr; }
     .steps, .quotes { grid-template-columns: 1fr; gap: 32px; }
     .quote { border-right: 0; }
     .final { padding: 80px 24px 40px; }
     .vlabel { display: none; }
   }
+
+  @media (max-width: 768px) {
+    .nav-body { padding: 14px 20px; gap: 16px; justify-content: space-between; }
+    .nav-center { display: none; }
+    .nav-cta { display: none; }
+    .hamburger { display: inline-flex; }
+    .logo-mark { width: 32px; height: 32px; }
+  }
+  @media (min-width: 769px) {
+    .mobile-menu, .mobile-scrim { display: none; }
+  }
 </style>
 </head>
 <body>
 
+<div class="page-frame" aria-hidden="true"></div>
+
 <!-- ============ NAV ============ -->
 <nav class="nav" id="nav">
-  <a href="#top" class="logo"><span class="logo-mark"></span>Retinal</a>
-  <div class="nav-links">
-    <a href="#how">How it works</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#about">About</a>
+  <a href="#top" class="logo" aria-label="Retinal — Home">
+    <span class="logo-mark"><img src="retinal-logo.png" alt="Retinal" /></span>
+  </a>
+  <div class="nav-body">
+    <span class="wordmark">Retinal</span>
+    <div class="nav-center">
+      <div class="nav-links">
+        <a href="#how"><span class="num">01</span>How it works</a>
+        <a href="#pricing"><span class="num">02</span>Pricing</a>
+        <a href="#about"><span class="num">03</span>About</a>
+        <a href="#faq"><span class="num">04</span>FAQ</a>
+      </div>
+    </div>
+    <button class="nav-cta" type="button">
+    <span>Get early access</span>
+    <span class="arrow-btn" aria-hidden="true">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <line x1="3" y1="8" x2="12" y2="8"/>
+        <polyline points="8.5,4 12.5,8 8.5,12"/>
+      </svg>
+    </span>
+  </button>
+  <button class="hamburger" type="button" id="hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span>
+  </button>
   </div>
-  <button class="btn">Get early access</button>
+</nav>
+
+<!-- mobile menu -->
+<div class="mobile-scrim" id="mScrim"></div>
+<div class="mobile-menu" id="mMenu" aria-hidden="true">
+  <div class="mm-links">
+    <a href="#how" class="mm-link"><span class="num">01</span>How it works</a>
+    <a href="#pricing" class="mm-link"><span class="num">02</span>Pricing</a>
+    <a href="#about" class="mm-link"><span class="num">03</span>About</a>
+    <a href="#faq" class="mm-link"><span class="num">04</span>FAQ</a>
+  </div>
+  <button class="mm-cta" type="button">Get early access</button>
+</div>
+
+<!-- side nav indicator (desktop) -->
+<nav class="side-nav" id="sideNav" aria-label="Section navigation">
+  <a href="#top" data-target="top">Intro</a>
+  <a href="#roi" data-target="roi">ROI</a>
+  <a href="#how" data-target="how">How it works</a>
+  <a href="#pricing" data-target="pricing">Pricing</a>
+  <a href="#about" data-target="about">Testimonials</a>
+  <a href="#faq" data-target="faq">FAQ</a>
+  <a href="#finalcta" data-target="finalcta">Get started</a>
 </nav>
 
 <!-- ============ HERO ============ -->
@@ -555,10 +803,8 @@
   <div class="section-inner">
     <div class="vlabel">ROI</div>
     <div class="roi-head reveal">
-      <div>
-        <div class="secnum">01</div>
-      </div>
-      <div class="body-col">
+      <div></div>
+      <div class="body-col" style="padding-top: 8px;">
         <div class="eyebrow">The cost of a missed call</div>
         <h2 class="h2">Every unanswered call is a job going to the next plumber on Google.</h2>
         <p class="lede">Tradespeople miss an average of 8&ndash;12 calls a week. That's up to £2,400 walking out the door &mdash; every single week.</p>
@@ -600,7 +846,7 @@
     <div class="vlabel">How it works</div>
     <div class="hiw-head reveal">
       <div>
-        <div class="secnum">02</div>
+        <div class="secnum">01</div>
       </div>
       <div class="body-col">
         <div class="eyebrow">Three steps, no faff</div>
@@ -633,9 +879,13 @@
   <div class="section-inner">
     <div class="vlabel">Pricing</div>
     <div class="price-head reveal">
-      <div class="secnum">03</div>
-      <div class="eyebrow">Simple pricing</div>
-      <h2 class="h2">One plan. Everything included. No surprises.</h2>
+      <div>
+        <div class="secnum">02</div>
+      </div>
+      <div class="body-col" style="padding-top: 8px;">
+        <div class="eyebrow">Simple pricing</div>
+        <h2 class="h2">One plan. Everything included. No surprises.</h2>
+      </div>
     </div>
 
     <div class="price-card reveal">
@@ -664,9 +914,9 @@
   <div class="section-inner">
     <div class="vlabel">Testimonials</div>
     <div class="hiw-head reveal">
-      <div><div class="secnum">04</div></div>
+      <div><div class="secnum">03</div></div>
       <div class="body-col">
-        <div class="eyebrow">What tradespeople say</div>
+        <h2 class="h2">What tradespeople say.</h2>
       </div>
     </div>
 
@@ -695,7 +945,7 @@
   <div class="section-inner">
     <div class="vlabel">FAQ</div>
     <div class="faq-head reveal">
-      <div><div class="secnum">05</div></div>
+      <div><div class="secnum">04</div></div>
       <div class="body-col">
         <h2 class="h2">Common questions</h2>
       </div>
@@ -731,7 +981,7 @@
 </section>
 
 <!-- ============ FINAL CTA / FOOTER ============ -->
-<footer class="final">
+<footer class="final" id="finalcta">
   <div class="final-art" aria-hidden="true">
     <svg viewBox="0 0 720 460" preserveAspectRatio="xMidYMax meet">
       <g fill="none" stroke="#3d6fd4" stroke-opacity="0.9">
@@ -755,7 +1005,7 @@
     </svg>
   </div>
   <div class="final-inner">
-    <div class="eyebrow" style="color: var(--accent); margin-bottom: 28px;">06 — Get started</div>
+    <div class="eyebrow" style="color: var(--accent); margin-bottom: 28px;">Get started</div>
     <h2>Ready to stop<br/>missing <em>jobs</em>?</h2>
     <button class="btn btn-light">Get early access</button>
 
@@ -791,14 +1041,53 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // Nav border on scroll
-  const nav = document.getElementById('nav');
-  const onScroll = () => {
-    if (window.scrollY > 8) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
+  // Mobile menu
+  const hamburger = document.getElementById('hamburger');
+  const mMenu = document.getElementById('mMenu');
+  const mScrim = document.getElementById('mScrim');
+  const closeMenu = () => {
+    mMenu.classList.remove('open');
+    mScrim.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    mMenu.setAttribute('aria-hidden', 'true');
   };
-  document.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  const openMenu = () => {
+    mMenu.classList.add('open');
+    mScrim.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    mMenu.setAttribute('aria-hidden', 'false');
+  };
+  hamburger.addEventListener('click', () => {
+    if (mMenu.classList.contains('open')) closeMenu();
+    else openMenu();
+  });
+  mScrim.addEventListener('click', closeMenu);
+  mMenu.querySelectorAll('a, .mm-cta').forEach(el => {
+    el.addEventListener('click', closeMenu);
+  });
+
+  // Sticky side-nav active state
+  const sideNav = document.getElementById('sideNav');
+  const sideLinks = sideNav.querySelectorAll('a');
+  const sectionIds = Array.from(sideLinks).map(a => a.dataset.target);
+  sideLinks.forEach(a => {
+    a.addEventListener('click', () => {
+      const t = document.getElementById(a.dataset.target);
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  const setActive = () => {
+    const y = window.scrollY + window.innerHeight * 0.35;
+    let current = sectionIds[0];
+    for (const id of sectionIds) {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= y) current = id;
+    }
+    sideLinks.forEach(a => a.classList.toggle('active', a.dataset.target === current));
+  };
+  document.addEventListener('scroll', setActive, { passive: true });
+  window.addEventListener('resize', setActive);
+  setActive();
 </script>
 
 </body>
