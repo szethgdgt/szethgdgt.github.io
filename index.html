@@ -1,41 +1,805 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Retinal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Morganite:wght@900&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #000;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    h1 {
-      font-family: 'Helvetica', sans-serif;
-      font-weight: 900;
-      font-size: clamp(100px, 25vw, 220px);
-      line-height: 0.85;
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: -0.02em;
-    }
-    p {
-      font-family: 'Morganite', sans-serif;
-      font-size: 13px;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: #666;
-      margin-top: 2rem;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Retinal — Never miss a job</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f9f8f6;
+    --ink: #0f0f0e;
+    --accent: #3d6fd4;
+    --body: #555555;
+    --muted: #888888;
+    --rule: #e0ddd8;
+    --ghost: #ede9e2;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--accent); color: #fff; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 56px;
+    transition: border-color .2s ease;
+    border-bottom: 1px solid transparent;
+  }
+  .nav.scrolled { border-bottom: 1px solid var(--rule); }
+  .logo {
+    font-weight: 700; letter-spacing: 0.12em; font-size: 14px;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-mark {
+    width: 14px; height: 14px; border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    position: relative;
+  }
+  .logo-mark::after {
+    content: ""; position: absolute; inset: 3px;
+    background: var(--accent); border-radius: 50%;
+  }
+  .nav-links {
+    display: flex; gap: 36px;
+    font-size: 13px; font-weight: 400; color: var(--body);
+  }
+  .nav-links a { transition: color .2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .btn {
+    font-family: inherit;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 12px 20px;
+    border: 1px solid var(--ink);
+    background: transparent; color: var(--ink);
+    cursor: pointer;
+    transition: background .18s, color .18s;
+  }
+  .btn:hover { background: var(--ink); color: #fff; }
+  .btn-solid { background: var(--ink); color: #fff; }
+  .btn-solid:hover { background: transparent; color: var(--ink); }
+  .btn-light {
+    border-color: #fff; color: #fff;
+  }
+  .btn-light:hover { background: #fff; color: var(--ink); }
+
+  /* ---------- Layout shell ---------- */
+  .section {
+    position: relative;
+    padding: 96px 56px;
+    border-top: 1px solid var(--rule);
+  }
+  .section:first-of-type { border-top: 0; }
+  .section-inner { max-width: 1240px; margin: 0 auto; position: relative; }
+  .vlabel {
+    position: absolute; top: 96px; right: -8px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 10px; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--muted);
+    font-weight: 500;
+  }
+  .eyebrow {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .secnum {
+    font-size: 88px; font-weight: 900;
+    letter-spacing: -0.04em; line-height: 1;
+    color: var(--ghost);
+    margin: 0 0 12px;
+    user-select: none;
+  }
+  .h2 {
+    font-size: 40px; font-weight: 700;
+    letter-spacing: -0.025em; line-height: 1.05;
+    margin: 22px 0 24px;
+    max-width: 760px;
+  }
+  .lede {
+    max-width: 640px;
+    font-size: 16px; font-weight: 300; line-height: 1.65;
+    color: var(--body);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 76px);
+    padding: 56px 56px 120px;
+    overflow: hidden;
+    border-top: 0;
+  }
+  .hero-grid {
+    position: relative;
+    z-index: 2;
+    max-width: 1240px; margin: 0 auto;
+    padding-top: 12px;
+  }
+  .hero-copy { position: relative; z-index: 2; max-width: 640px; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-bottom: 36px;
+  }
+  .hero-eyebrow::before {
+    content: ""; width: 18px; height: 1px; background: var(--accent);
+  }
+  .hero-h1 {
+    font-size: clamp(48px, 6.4vw, 86px);
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    margin: 0 0 32px;
+  }
+  .hero-h1 em {
+    font-style: italic; color: var(--accent);
+    font-weight: 900;
+  }
+  .hero-sub {
+    max-width: 480px;
+    font-size: 16px; font-weight: 300; line-height: 1.65;
+    color: var(--body);
+    margin: 0 0 40px;
+  }
+  .hero-ctas { display: flex; align-items: center; gap: 28px; }
+  .link-accent {
+    color: var(--accent);
+    font-size: 13px; font-weight: 400;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 2px;
+    transition: opacity .2s;
+  }
+  .link-accent:hover { opacity: 0.7; }
+
+  .hero-art {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .hero-art svg { width: 100%; height: 100%; display: block; }
+  /* Soft veil behind the copy so lines stay visible but text reads */
+  .hero-copy::before {
+    content: "";
+    position: absolute;
+    left: -24px; right: -40px; top: -24px; bottom: -24px;
+    background: radial-gradient(ellipse at 30% 45%, var(--bg) 0%, rgba(249,248,246,0.9) 38%, rgba(249,248,246,0) 78%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .hero-meta {
+    position: absolute; left: 56px; right: 56px; bottom: 32px;
+    display: flex; justify-content: space-between;
+    color: var(--muted); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; font-weight: 500;
+    max-width: 1240px; margin: 0 auto;
+  }
+
+  /* ---------- Section 02 ROI ---------- */
+  .roi-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: end; margin-bottom: 64px; }
+  .roi-head .secnum { margin-bottom: 0; }
+  .roi-head .body-col { max-width: 620px; }
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--rule);
+    border-right: 0; border-bottom: 0;
+  }
+  .stat-cell {
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 44px 36px 36px;
+    min-height: 320px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    background: var(--bg);
+  }
+  .stat-cell.dark { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .stat-cell .label {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 500; color: var(--muted);
+  }
+  .stat-cell.dark .label { color: rgba(255,255,255,0.5); }
+  .stat-num {
+    font-size: 88px; font-weight: 900; letter-spacing: -0.04em;
+    line-height: 1; margin: 28px 0 0;
+  }
+  .stat-num .pop { color: var(--accent); }
+  .stat-cell.dark .stat-num { color: #fff; }
+  .stat-cell.dark .stat-num .pop { color: var(--accent); }
+  .stat-body {
+    font-size: 14px; font-weight: 300; line-height: 1.55;
+    color: var(--body);
+    margin: 28px 0 0;
+    max-width: 280px;
+  }
+  .stat-cell.dark .stat-body { color: rgba(255,255,255,0.7); }
+  .stat-foot {
+    margin-top: 24px;
+    font-size: 11px; color: var(--muted);
+    font-weight: 300;
+  }
+  .stat-cell.dark .stat-foot { color: rgba(255,255,255,0.4); }
+
+  /* ---------- Section 03 How it works ---------- */
+  .hiw-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: end; margin-bottom: 80px; }
+  .hiw-head .body-col { max-width: 640px; }
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 56px;
+    border-top: 1px solid var(--rule);
+    padding-top: 48px;
+  }
+  .step .step-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 36px; display: inline-block;
+  }
+  .step h3 {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.015em;
+    line-height: 1.2; margin: 0 0 18px;
+    max-width: 240px;
+  }
+  .step p {
+    font-size: 14px; font-weight: 300; line-height: 1.65;
+    color: var(--body); margin: 0;
+    max-width: 320px;
+  }
+
+  /* ---------- Pricing ---------- */
+  .price-head { text-align: center; margin-bottom: 64px; }
+  .price-head .secnum { margin: 0 auto 16px; }
+  .price-head .h2 { margin: 12px auto 0; max-width: 640px; }
+  .price-head .eyebrow { display: block; margin-bottom: 0; }
+  .price-card {
+    max-width: 540px; margin: 0 auto;
+    border: 1px solid var(--ink);
+    background: var(--bg);
+    padding: 44px 44px 36px;
+  }
+  .price-row { display: flex; align-items: baseline; justify-content: space-between; }
+  .price-amt {
+    font-size: 64px; font-weight: 900; letter-spacing: -0.035em;
+    line-height: 1;
+  }
+  .price-per {
+    font-size: 13px; color: var(--muted);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+  }
+  .price-card ul {
+    list-style: none; padding: 0; margin: 32px 0 28px;
+    border-top: 1px solid var(--rule);
+  }
+  .price-card li {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px; font-weight: 300; color: var(--ink);
+  }
+  .price-card li span:last-child { color: var(--muted); font-size: 12px; }
+  .price-card .btn { display: block; width: 100%; text-align: center; padding: 16px; }
+  .price-foot {
+    text-align: center; font-size: 12px; color: var(--muted);
+    margin-top: 22px; font-weight: 300;
+  }
+
+  /* ---------- Testimonials ---------- */
+  .quotes {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+  .quote {
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 40px 36px;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+  }
+  .quote-mark {
+    font-family: 'Inter'; font-weight: 900;
+    color: var(--accent); font-size: 40px;
+    line-height: 0.6; margin-bottom: 18px;
+  }
+  .quote p {
+    font-size: 18px; font-weight: 300; font-style: italic;
+    line-height: 1.5; color: var(--ink);
+    margin: 0 0 32px; flex: 1;
+    letter-spacing: -0.01em;
+  }
+  .quote .who {
+    font-size: 13px; font-weight: 500; color: var(--ink);
+  }
+  .quote .who small {
+    display: block; font-size: 11px; font-weight: 400; color: var(--muted);
+    letter-spacing: 0.06em; margin-top: 4px;
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: end; margin-bottom: 56px; }
+  .faq { max-width: 880px; margin: 0 auto; border-top: 1px solid var(--rule); }
+  .faq details {
+    border-bottom: 1px solid var(--rule);
+    padding: 22px 0;
+  }
+  .faq summary {
+    list-style: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 17px; font-weight: 700; letter-spacing: -0.01em;
+    color: var(--ink);
+    padding: 6px 0;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after {
+    content: "+"; font-weight: 300; font-size: 22px; color: var(--accent);
+    transition: transform .25s ease;
+  }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq .ans {
+    font-size: 15px; font-weight: 300; line-height: 1.65;
+    color: var(--body); max-width: 700px;
+    margin: 14px 0 8px;
+  }
+
+  /* ---------- Final CTA / Footer ---------- */
+  .final {
+    background: var(--ink); color: #fff;
+    padding: 140px 56px 60px;
+    border-top: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .final-art {
+    position: absolute; right: 0; bottom: 0; width: 60%; max-width: 720px;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .final-art svg { width: 100%; display: block; }
+  .final-inner { position: relative; max-width: 1240px; margin: 0 auto; }
+  .final h2 {
+    font-size: clamp(40px, 5.5vw, 72px); font-weight: 900;
+    letter-spacing: -0.035em; line-height: 0.98;
+    margin: 0 0 40px; max-width: 800px;
+  }
+  .final h2 em { font-style: italic; color: var(--accent); }
+  .final-foot {
+    margin-top: 140px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 24px; flex-wrap: wrap;
+    font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 300;
+  }
+  .final-foot .logo { color: #fff; }
+  .final-foot a:hover { color: #fff; }
+  .final-foot .col { display: flex; flex-direction: column; gap: 8px; }
+  .final-foot .links { display: flex; gap: 24px; }
+
+  /* ---------- Scroll animations ---------- */
+  .reveal {
+    opacity: 0; transform: translateY(14px);
+    transition: opacity .55s ease-out, transform .55s ease-out;
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 960px) {
+    .nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .section { padding: 64px 24px; }
+    .hero { padding: 32px 24px 80px; }
+    .hero-meta { display: none; }
+    .hero-h1 { font-size: clamp(40px, 9vw, 64px); }
+    .roi-head, .hiw-head, .faq-head { grid-template-columns: 1fr; gap: 16px; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .steps, .quotes { grid-template-columns: 1fr; gap: 32px; }
+    .quote { border-right: 0; }
+    .final { padding: 80px 24px 40px; }
+    .vlabel { display: none; }
+  }
+</style>
 </head>
 <body>
-  <h1>Retinal</h1>
-  <p>soon come</p>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <a href="#top" class="logo"><span class="logo-mark"></span>Retinal</a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#about">About</a>
+  </div>
+  <button class="btn">Get early access</button>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <!-- Full-bleed cobalt linework. Anchored bottom-right; reaches across page. -->
+  <div class="hero-art" id="heroArt" aria-hidden="true" style="filter: contrast(1.05)">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <g fill="none" stroke="var(--accent)">
+
+        <!-- Faint baseline grid spanning the whole hero -->
+        <g class="lw lw-grid" stroke="var(--accent)" stroke-opacity="0.14" stroke-width="1">
+          <path d="M0 100 L1600 100 M0 220 L1600 220 M0 340 L1600 340 M0 460 L1600 460 M0 580 L1600 580 M0 700 L1600 700 M0 820 L1600 820"/>
+          <path d="M100 0 L100 900 M260 0 L260 900 M420 0 L420 900 M580 0 L580 900 M740 0 L740 900 M900 0 L900 900 M1060 0 L1060 900 M1220 0 L1220 900 M1380 0 L1380 900 M1540 0 L1540 900"/>
+        </g>
+
+        <!-- Long perspective lines converging to a focal point on the right -->
+        <g class="lw lw-rays" stroke-width="1" stroke-opacity="0.55">
+          <line x1="0"    y1="40"   x2="1320" y2="560"/>
+          <line x1="0"    y1="140"  x2="1320" y2="560"/>
+          <line x1="0"    y1="260"  x2="1320" y2="560"/>
+          <line x1="0"    y1="400"  x2="1320" y2="560"/>
+          <line x1="0"    y1="560"  x2="1320" y2="560"/>
+          <line x1="0"    y1="720"  x2="1320" y2="560"/>
+          <line x1="0"    y1="880"  x2="1320" y2="560"/>
+          <line x1="1600" y1="60"   x2="1320" y2="560"/>
+          <line x1="1600" y1="200"  x2="1320" y2="560"/>
+          <line x1="1600" y1="900"  x2="1320" y2="560"/>
+        </g>
+
+        <!-- Bold dominant diagonals — slice across the page -->
+        <g class="lw lw-diag" stroke-width="2.5">
+          <line x1="-40"  y1="900"  x2="1640" y2="40"/>
+        </g>
+        <g class="lw lw-diag" stroke-width="1.6" stroke-opacity="0.85">
+          <line x1="-40"  y1="640"  x2="1640" y2="120"/>
+          <line x1="-40"  y1="320"  x2="1640" y2="780"/>
+        </g>
+
+        <!-- Concentric signal arcs from the right focal point -->
+        <g class="lw lw-arcs" stroke-width="1" stroke-opacity="0.8">
+          <circle cx="1320" cy="560" r="160"/>
+          <circle cx="1320" cy="560" r="260"/>
+          <circle cx="1320" cy="560" r="380"/>
+          <circle cx="1320" cy="560" r="520"/>
+          <circle cx="1320" cy="560" r="680"/>
+          <circle cx="1320" cy="560" r="860"/>
+          <circle cx="1320" cy="560" r="1060"/>
+          <circle cx="1320" cy="560" r="1280"/>
+        </g>
+
+        <!-- 'Aperture' — a quietly precise focal circle on the right -->
+        <circle class="lw lw-ap" cx="1320" cy="560" r="200" stroke-width="1.4" stroke-opacity="0.95"/>
+        <circle class="lw lw-ap" cx="1320" cy="560" r="110" stroke-width="1" stroke-opacity="0.6"/>
+
+        <!-- Tick ladder on right edge -->
+        <g class="lw lw-tick" stroke-width="1" stroke-opacity="0.7">
+          <line x1="1560" y1="80"  x2="1590" y2="80"/>
+          <line x1="1560" y1="110" x2="1590" y2="110"/>
+          <line x1="1560" y1="140" x2="1590" y2="140"/>
+          <line x1="1560" y1="170" x2="1590" y2="170"/>
+          <line x1="1560" y1="200" x2="1590" y2="200"/>
+          <line x1="1560" y1="230" x2="1590" y2="230"/>
+        </g>
+
+        <!-- Dot constellation -->
+        <g class="lw lw-dots" fill="var(--accent)" stroke="none">
+          <circle cx="1320" cy="560" r="7"/>
+          <circle cx="1180" cy="500" r="3.5"/>
+          <circle cx="1040" cy="430" r="2.5"/>
+          <circle cx="900"  cy="360" r="4"/>
+          <circle cx="760"  cy="290" r="2"/>
+          <circle cx="600"  cy="220" r="3"/>
+          <circle cx="420"  cy="160" r="2"/>
+          <circle cx="1480" cy="700" r="4"/>
+          <circle cx="1100" cy="780" r="3"/>
+          <circle cx="820"  cy="820" r="2"/>
+          <circle cx="280"  cy="780" r="3"/>
+        </g>
+
+        <!-- Crosshair on focal point -->
+        <g class="lw lw-cross" stroke-width="1" stroke-opacity="0.9">
+          <line x1="1290" y1="560" x2="1350" y2="560"/>
+          <line x1="1320" y1="530" x2="1320" y2="590"/>
+        </g>
+
+        <!-- Solid corner anchor -->
+        <g class="lw lw-anchor" fill="var(--accent)" stroke="none">
+          <rect x="1400" y="820" width="160" height="6"/>
+          <rect x="1554" y="820" width="6" height="60"/>
+        </g>
+      </g>
+
+      <!-- Mono tick labels -->
+      <g class="lw lw-labels" fill="var(--accent)" font-family="ui-monospace, Menlo, monospace" font-size="11" letter-spacing="2" opacity="0.7">
+        <text x="1400" y="876" font-weight="500">02:14 · LIVE</text>
+        <text x="40"   y="876" font-weight="500">RTNL · 01 / UK</text>
+        <text x="1330" y="554" font-weight="500">+44</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-grid">
+    <div class="hero-copy reveal">
+      <div class="hero-eyebrow eyebrow">AI Receptionist for Tradespeople</div>
+      <h1 class="hero-h1">Never miss a job<br/>because you'll<br/><em>never</em> miss a call.</h1>
+      <p class="hero-sub">Customised AI receptionists with Retinal. Built for plumbers, electricians, and gas engineers who are too busy on the tools to answer every call.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-solid">Get early access</button>
+        <a href="#" class="link-accent">Hear our agent →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-meta">
+    <span>Retinal — Est. 2026</span>
+    <span>UK Tradespeople · v1.0</span>
+  </div>
+</header>
+
+<!-- ============ 02 ROI ============ -->
+<section class="section" id="roi">
+  <div class="section-inner">
+    <div class="vlabel">ROI</div>
+    <div class="roi-head reveal">
+      <div>
+        <div class="secnum">01</div>
+      </div>
+      <div class="body-col">
+        <div class="eyebrow">The cost of a missed call</div>
+        <h2 class="h2">Every unanswered call is a job going to the next plumber on Google.</h2>
+        <p class="lede">Tradespeople miss an average of 8&ndash;12 calls a week. That's up to £2,400 walking out the door &mdash; every single week.</p>
+      </div>
+    </div>
+
+    <div class="stat-grid reveal">
+      <div class="stat-cell dark">
+        <div class="label">Lost per week</div>
+        <div>
+          <div class="stat-num">£<span class="pop">2,400</span></div>
+          <p class="stat-body">Lost revenue per week from missed calls.</p>
+        </div>
+        <div class="stat-foot">Based on 12 missed calls at avg. job value.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="label">Missed calls</div>
+        <div>
+          <div class="stat-num">8&ndash;12<span class="pop">×</span></div>
+          <p class="stat-body">Missed calls per week for a typical tradesperson.</p>
+        </div>
+        <div class="stat-foot">Industry average, UK trade operators.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="label">Return on Retinal</div>
+        <div>
+          <div class="stat-num">30<span class="pop">×</span></div>
+          <p class="stat-body">Average ROI on a Retinal subscription.</p>
+        </div>
+        <div class="stat-foot">Recovered job value vs. monthly cost.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 HOW IT WORKS ============ -->
+<section class="section" id="how">
+  <div class="section-inner">
+    <div class="vlabel">How it works</div>
+    <div class="hiw-head reveal">
+      <div>
+        <div class="secnum">02</div>
+      </div>
+      <div class="body-col">
+        <div class="eyebrow">Three steps, no faff</div>
+        <h2 class="h2">You take the call you missed. We do everything else.</h2>
+      </div>
+    </div>
+
+    <div class="steps reveal">
+      <div class="step">
+        <span class="step-label">Step 01</span>
+        <h3>Your customer calls</h3>
+        <p>They ring your number. You're up a ladder, under a sink, or just busy. Retinal picks up in under two rings.</p>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 02</span>
+        <h3>Retinal handles it</h3>
+        <p>Our AI — trained on real trade language — takes their details, understands the job, and qualifies the lead. No scripts. No robots.</p>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 03</span>
+        <h3>Job lands in your WhatsApp</h3>
+        <p>Name, number, postcode, job type, urgency. All in one message. One tap to confirm. Done before you're off the ladder.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 PRICING ============ -->
+<section class="section" id="pricing">
+  <div class="section-inner">
+    <div class="vlabel">Pricing</div>
+    <div class="price-head reveal">
+      <div class="secnum">03</div>
+      <div class="eyebrow">Simple pricing</div>
+      <h2 class="h2">One plan. Everything included. No surprises.</h2>
+    </div>
+
+    <div class="price-card reveal">
+      <div class="price-row">
+        <div>
+          <div class="price-amt">£149</div>
+        </div>
+        <div class="price-per">per month</div>
+      </div>
+      <ul>
+        <li><span>150 minutes included</span><span>per month</span></li>
+        <li><span>Done-for-you setup</span><span>48 hours</span></li>
+        <li><span>WhatsApp lead delivery</span><span>real-time</span></li>
+        <li><span>Weekly QA review</span><span>included</span></li>
+        <li><span>Overage</span><span>£0.80 / min</span></li>
+        <li><span>Cancellation</span><span>30 days</span></li>
+      </ul>
+      <button class="btn btn-solid">Get started</button>
+    </div>
+    <p class="price-foot">£199 one-off setup fee, or free with annual prepay (£1,600/yr).</p>
+  </div>
+</section>
+
+<!-- ============ 05 TESTIMONIALS ============ -->
+<section class="section" id="about">
+  <div class="section-inner">
+    <div class="vlabel">Testimonials</div>
+    <div class="hiw-head reveal">
+      <div><div class="secnum">04</div></div>
+      <div class="body-col">
+        <div class="eyebrow">What tradespeople say</div>
+      </div>
+    </div>
+
+    <div class="quotes reveal">
+      <div class="quote">
+        <div class="quote-mark">"</div>
+        <p>Picked up a £900 boiler swap I would have completely missed. Paid for itself in one morning.</p>
+        <div class="who">Dave H.<small>Plumber · North London</small></div>
+      </div>
+      <div class="quote">
+        <div class="quote-mark">"</div>
+        <p>It sounds like a person. My customers don't notice. I just get the WhatsApp and ring them back when I'm done.</p>
+        <div class="who">Marcus T.<small>Electrician · Manchester</small></div>
+      </div>
+      <div class="quote">
+        <div class="quote-mark">"</div>
+        <p>Setup took a phone call. Two days later it was live. I haven't lost a job to voicemail since.</p>
+        <div class="who">Sam R.<small>Gas Engineer · Bristol</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 FAQ ============ -->
+<section class="section" id="faq">
+  <div class="section-inner">
+    <div class="vlabel">FAQ</div>
+    <div class="faq-head reveal">
+      <div><div class="secnum">05</div></div>
+      <div class="body-col">
+        <h2 class="h2">Common questions</h2>
+      </div>
+    </div>
+
+    <div class="faq reveal">
+      <details>
+        <summary>Will my customers know it's AI?</summary>
+        <p class="ans">No — and we don't pretend otherwise either. The agent introduces itself by name, sounds natural, and gets the job done. Most callers won't think twice. If asked directly, it's honest.</p>
+      </details>
+      <details>
+        <summary>What if it gets something wrong?</summary>
+        <p class="ans">Every call is reviewed by us in the first two weeks and weekly thereafter. We'll catch slips and retrain the agent on your specific patterns. If a job comes through wrong, we make it right.</p>
+      </details>
+      <details>
+        <summary>How long does setup take?</summary>
+        <p class="ans">48 hours from the moment we have your number and a 20-minute intro call. Done-for-you. You don't touch a dashboard.</p>
+      </details>
+      <details>
+        <summary>Can I cancel anytime?</summary>
+        <p class="ans">Yes. 30 days' notice, no long contract, no exit fee. If you stop missing calls, you stop paying.</p>
+      </details>
+      <details>
+        <summary>What trades do you work with?</summary>
+        <p class="ans">Plumbers, electricians, and gas engineers — that's it for now. The agent is trained on the language and qualification patterns of those trades specifically.</p>
+      </details>
+      <details>
+        <summary>What happens to the call recordings?</summary>
+        <p class="ans">Stored encrypted in the UK for 90 days, then deleted. Used only for QA and agent improvement. Never sold, never shared. GDPR &amp; UK DPA 2018 compliant.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA / FOOTER ============ -->
+<footer class="final">
+  <div class="final-art" aria-hidden="true">
+    <svg viewBox="0 0 720 460" preserveAspectRatio="xMidYMax meet">
+      <g fill="none" stroke="#3d6fd4" stroke-opacity="0.9">
+        <g stroke-width="1">
+          <circle cx="560" cy="420" r="120"/>
+          <circle cx="560" cy="420" r="200"/>
+          <circle cx="560" cy="420" r="290"/>
+          <circle cx="560" cy="420" r="380"/>
+        </g>
+        <g stroke-width="1.4">
+          <line x1="20" y1="440" x2="700" y2="80"/>
+          <line x1="20" y1="380" x2="700" y2="160"/>
+        </g>
+        <g fill="#3d6fd4" stroke="none">
+          <circle cx="560" cy="420" r="5"/>
+          <circle cx="380" cy="320" r="3"/>
+          <circle cx="200" cy="220" r="2"/>
+          <circle cx="640" cy="180" r="4"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+  <div class="final-inner">
+    <div class="eyebrow" style="color: var(--accent); margin-bottom: 28px;">06 — Get started</div>
+    <h2>Ready to stop<br/>missing <em>jobs</em>?</h2>
+    <button class="btn btn-light">Get early access</button>
+
+    <div class="final-foot">
+      <div class="col">
+        <span class="logo" style="color:#fff"><span class="logo-mark" style="border-color:#fff"></span>Retinal</span>
+        <span>© 2026 Retinal Ltd.</span>
+      </div>
+      <div class="col" style="align-items:flex-start">
+        <div class="links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+      <div class="col" style="text-align:right; align-items:flex-end">
+        <span>ICO Registration ZB&#8239;891&#8239;204</span>
+        <span>GDPR &amp; UK DPA 2018 compliant</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Nav border on scroll
+  const nav = document.getElementById('nav');
+  const onScroll = () => {
+    if (window.scrollY > 8) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+
 </body>
 </html>
