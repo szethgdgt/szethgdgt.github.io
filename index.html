@@ -278,6 +278,19 @@
   @media (min-width: 1024px) {
     .side-nav { display: flex; }
   }
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 9999;
+    transition: top .2s;
+  }
+  .skip-link:focus { top: 0; }
   .btn {
     font-family: inherit;
     font-size: 11px; font-weight: 500;
@@ -666,12 +679,13 @@
 </head>
 <body>
 
+<a href="#top" class="skip-link">Skip to main content</a>
 <div class="page-frame" aria-hidden="true"></div>
 
 <!-- ============ NAV ============ -->
 <nav class="nav" id="nav">
   <a href="#top" class="logo" aria-label="Retinal — Home">
-    <span class="logo-mark"><img src="retinal-logo.png" alt="Retinal" /></span>
+    <span class="logo-mark"><img src="retinal-logo.png" alt="Retinal" width="44" height="44" /></span>
   </a>
   <div class="nav-body">
     <span class="wordmark">Retinal</span>
@@ -962,17 +976,17 @@
 
     <div class="quotes reveal">
       <div class="quote">
-        <div class="quote-mark">"</div>
+        <div class="quote-mark" aria-hidden="true">"</div>
         <p>Picked up a £900 boiler swap I would have completely missed. Paid for itself in one morning.</p>
         <div class="who">Dave H.<small>Plumber · North London</small></div>
       </div>
       <div class="quote">
-        <div class="quote-mark">"</div>
+        <div class="quote-mark" aria-hidden="true">"</div>
         <p>It sounds like a person. My customers don't notice. I just get the WhatsApp and ring them back when I'm done.</p>
         <div class="who">Marcus T.<small>Electrician · Manchester</small></div>
       </div>
       <div class="quote">
-        <div class="quote-mark">"</div>
+        <div class="quote-mark" aria-hidden="true">"</div>
         <p>Setup took a phone call. Two days later it was live. I haven't lost a job to voicemail since.</p>
         <div class="who">Sam R.<small>Gas Engineer · Bristol</small></div>
       </div>
