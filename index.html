@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="color-scheme" content="light" />
 <title>Retinal — Never miss a job</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -625,7 +625,7 @@
 
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
-    .nav { padding: 16px 20px; }
+    .nav { padding: env(safe-area-inset-top) 20px 0; }
     .section { padding: 64px 24px; }
     .hero { padding: 32px 24px 80px; }
     .hero-meta { display: none; }
