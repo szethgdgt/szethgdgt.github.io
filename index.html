@@ -662,6 +662,148 @@
     .mobile-menu, .mobile-scrim { display: none; }
   }
 
+  /* ---------- Touch action ---------- */
+  button, a { touch-action: manipulation; }
+
+  /* ---------- Card hover ---------- */
+  .stat-cell { transition: border-color .2s, background .2s; }
+  .stat-cell:not(.dark):hover { border-color: var(--ink); }
+
+  /* ---------- Staggered child reveals ---------- */
+  .stat-cell.reveal:nth-child(2),
+  .step.reveal:nth-child(2),
+  .quote.reveal:nth-child(2),
+  .maths-card.reveal:nth-child(2) { transition-delay: .1s; }
+  .stat-cell.reveal:nth-child(3),
+  .step.reveal:nth-child(3),
+  .quote.reveal:nth-child(3),
+  .maths-card.reveal:nth-child(3) { transition-delay: .2s; }
+
+  /* ---------- Hero trust bar (mobile only) ---------- */
+  .hero-trust {
+    margin-top: 36px; padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    max-width: 480px;
+    font-size: 13px; font-weight: 300;
+    color: var(--body); line-height: 1.6;
+  }
+  .hero-trust strong { font-weight: 500; color: var(--ink); }
+  .hero-trust cite {
+    font-style: normal; font-size: 11px;
+    color: var(--muted); display: block;
+    margin-top: 8px; letter-spacing: 0.06em;
+  }
+  @media (min-width: 769px) { .hero-trust { display: none; } }
+
+  /* ---------- Maths section ---------- */
+  .maths-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; margin-bottom: 64px; }
+  .maths-head .body-col { max-width: 640px; }
+  .maths-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .maths-card {
+    border: 1px solid var(--rule);
+    padding: 36px 32px 32px;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    transition: border-color .2s;
+  }
+  .maths-card.featured { border-color: var(--ink); }
+  .maths-card:not(.featured):hover { border-color: var(--ink); }
+  .maths-card-title {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 24px;
+  }
+  .maths-card.featured .maths-card-title { color: var(--accent); }
+  .maths-items { flex: 1; }
+  .maths-item {
+    display: flex; align-items: flex-start;
+    justify-content: space-between;
+    padding: 13px 0; border-bottom: 1px solid var(--rule);
+    gap: 20px;
+  }
+  .maths-items > .maths-item:first-child { border-top: 1px solid var(--rule); }
+  .maths-val {
+    font-size: 15px; font-weight: 700;
+    letter-spacing: -0.02em; color: var(--ink);
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .maths-desc {
+    font-size: 13px; font-weight: 300;
+    color: var(--body); line-height: 1.45;
+  }
+  .maths-sources {
+    font-size: 11px; font-weight: 300;
+    color: var(--muted); line-height: 1.6;
+    margin-top: 24px; padding-top: 20px;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* ---------- Demo cards ---------- */
+  .demo-cards .quote-mark {
+    font-size: 20px; font-weight: 700;
+    color: var(--accent); letter-spacing: -0.01em;
+    margin-bottom: 20px; line-height: 1;
+  }
+  .demo-cards .quote p {
+    font-style: normal; font-size: 15px;
+    letter-spacing: 0; margin: 0 0 20px;
+  }
+  .demo-cards .who { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+  .demo-cards .who small {
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    font-weight: 500; margin-top: 6px;
+  }
+  .demo-cta {
+    margin-top: 40px;
+    font-size: 14px; font-weight: 300; color: var(--body);
+  }
+  .demo-cta a { color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 1px; }
+
+  /* ---------- Pricing sub-anchor ---------- */
+  .price-sub {
+    font-size: 14px; font-weight: 300;
+    color: var(--body); line-height: 1.65;
+    max-width: 540px; margin: 0 auto 36px;
+    text-align: center;
+  }
+
+  /* ---------- Footer sub + secondary CTA + founder ---------- */
+  .final-sub {
+    font-size: 16px; font-weight: 300;
+    color: rgba(255,255,255,0.7); line-height: 1.65;
+    margin: 20px 0 36px; max-width: 560px;
+  }
+  .final-ctas { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .final-link {
+    color: var(--accent); font-size: 13px; font-weight: 400;
+    border-bottom: 1px solid var(--accent); padding-bottom: 2px;
+    transition: opacity .2s;
+  }
+  .final-link:hover { opacity: 0.7; }
+  .founder-line {
+    margin: 64px 0 0; padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 15px; font-weight: 300; font-style: italic;
+    color: rgba(255,255,255,0.75); line-height: 1.7;
+    max-width: 640px;
+  }
+  .founder-line cite {
+    font-style: normal; font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,0.5); display: block;
+    margin-top: 20px; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  /* ---------- Responsive: new sections ---------- */
+  @media (max-width: 960px) {
+    .maths-head { grid-template-columns: 1fr; gap: 16px; }
+    .maths-grid { grid-template-columns: 1fr; gap: 16px; }
+    .final-ctas { flex-direction: column; align-items: flex-start; gap: 20px; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
 
@@ -671,11 +813,18 @@
       transition: none;
     }
 
-    .mobile-menu {
-      transition: none;
-    }
+    .stat-cell.reveal:nth-child(2),
+    .stat-cell.reveal:nth-child(3),
+    .step.reveal:nth-child(2),
+    .step.reveal:nth-child(3),
+    .quote.reveal:nth-child(2),
+    .quote.reveal:nth-child(3),
+    .maths-card.reveal:nth-child(2),
+    .maths-card.reveal:nth-child(3) { transition-delay: 0s; }
 
+    .mobile-menu { transition: none; }
     .skip-link { transition: none; }
+    .stat-cell, .maths-card { transition: none; }
   }
 </style>
 </head>
@@ -730,6 +879,7 @@
 <nav class="side-nav" id="sideNav" aria-label="Section navigation">
   <a href="#top" data-target="top">Intro</a>
   <a href="#roi" data-target="roi">ROI</a>
+  <a href="#maths" data-target="maths">The maths</a>
   <a href="#how" data-target="how">How it works</a>
   <a href="#pricing" data-target="pricing">Pricing</a>
   <a href="#about" data-target="about">Testimonials</a>
@@ -845,6 +995,10 @@
         <button class="btn btn-solid">Get your number set up →</button>
         <a href="#" class="link-accent">Hear Mae answer a real call →</a>
       </div>
+      <div class="hero-trust">
+        <strong>1 in 3 UK tradespeople</strong> have lost work to a missed call. Mae answers in under 2 rings, 24/7, in your WhatsApp.
+        <cite>* Fix Radio survey of 220+ UK tradespeople</cite>
+      </div>
     </div>
   </div>
 
@@ -867,30 +1021,110 @@
       </div>
     </div>
 
-    <div class="stat-grid reveal">
-      <div class="stat-cell dark">
-        <div class="label">Lost per week</div>
+    <div class="stat-grid">
+      <div class="stat-cell reveal">
+        <div class="label">Missed calls</div>
         <div>
           <div class="stat-num">34<span class="pop">%</span></div>
           <p class="stat-body">of UK tradespeople have lost work directly because they didn't answer their phone. 60% regularly struggle to take calls on site.</p>
         </div>
         <div class="stat-foot">Source: Fix Radio survey of 220+ UK tradespeople.</div>
       </div>
-      <div class="stat-cell">
-        <div class="label">Missed calls</div>
+      <div class="stat-cell reveal">
+        <div class="label">Voicemail drop</div>
         <div>
           <div class="stat-num">80<span class="pop">%</span></div>
           <p class="stat-body">of callers who reach voicemail hang up without leaving a message. They don't ring back. They call the next number on Google.</p>
         </div>
         <div class="stat-foot">Source: Hiya State of the Call report.</div>
       </div>
-      <div class="stat-cell">
-        <div class="label">Return on Retinal</div>
+      <div class="stat-cell dark reveal">
+        <div class="label">Job values answered</div>
         <div>
           <div class="stat-num">£275 · £300 · <span class="pop">£3,000</span></div>
           <p class="stat-body">A boiler breakdown. A boiler repair. A new combi install. Three calls Mae could have answered while you were on a job. Retinal costs £149 a month.</p>
         </div>
         <div class="stat-foot">Source: Checkatrade UK average job values, 2026.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MATHS ============ -->
+<section class="section" id="maths">
+  <div class="section-inner">
+    <div class="vlabel">The maths</div>
+    <div class="maths-head reveal">
+      <div></div>
+      <div class="body-col" style="padding-top: 8px;">
+        <div class="eyebrow">The maths</div>
+        <h2 class="h2">One recovered call pays for two months. Sometimes two years.</h2>
+      </div>
+    </div>
+
+    <div class="maths-grid">
+      <div class="maths-card featured reveal">
+        <div class="maths-card-title">What you pay</div>
+        <div class="maths-items">
+          <div class="maths-item">
+            <span class="maths-val">£149</span>
+            <span class="maths-desc">per month</span>
+          </div>
+          <div class="maths-item">
+            <span class="maths-val">150 min</span>
+            <span class="maths-desc">included — roughly 100–150 calls answered</span>
+          </div>
+          <div class="maths-item">
+            <span class="maths-val">£0.80</span>
+            <span class="maths-desc">per minute overage</span>
+          </div>
+          <div class="maths-item">
+            <span class="maths-val">£0</span>
+            <span class="maths-desc">setup fee on annual prepay</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="maths-card reveal">
+        <div class="maths-card-title">What one recovered job is worth</div>
+        <div class="maths-items">
+          <div class="maths-item">
+            <span class="maths-val">£100</span>
+            <span class="maths-desc">Standard plumber callout</span>
+          </div>
+          <div class="maths-item">
+            <span class="maths-val">£275</span>
+            <span class="maths-desc">Boiler breakdown call-out</span>
+          </div>
+          <div class="maths-item">
+            <span class="maths-val">£335</span>
+            <span class="maths-desc">Electrician day rate</span>
+          </div>
+          <div class="maths-item">
+            <span class="maths-val">£3,000</span>
+            <span class="maths-desc">Full combi boiler install</span>
+          </div>
+        </div>
+        <div class="maths-sources">Sources: Checkatrade (job values), Logic4training (electrician day rate)</div>
+      </div>
+
+      <div class="maths-card reveal">
+        <div class="maths-card-title">What the alternatives cost</div>
+        <div class="maths-items">
+          <div class="maths-item">
+            <span class="maths-val">£35k–£45k</span>
+            <span class="maths-desc">Full-time UK receptionist, fully loaded — per year</span>
+          </div>
+          <div class="maths-item">
+            <span class="maths-val">£100–£300</span>
+            <span class="maths-desc">Traditional UK phone answering service — per month</span>
+          </div>
+          <div class="maths-item">
+            <span class="maths-val">£0</span>
+            <span class="maths-desc">What voicemail recovers — 80% of callers don't leave one</span>
+          </div>
+        </div>
+        <div class="maths-sources">Sources: Observe Automation (receptionist cost), Clara (answering service), Hiya State of the Call</div>
       </div>
     </div>
   </div>
@@ -910,18 +1144,18 @@
       </div>
     </div>
 
-    <div class="steps reveal">
-      <div class="step">
+    <div class="steps">
+      <div class="step reveal">
         <span class="step-label">Step 01</span>
         <h3>Your customer rings</h3>
         <p>They call your number. You're on a job, under a sink, up a roof, in the van. Mae picks up in under two rings — before it goes to voicemail.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <span class="step-label">Step 02</span>
         <h3>Mae takes the details</h3>
         <p>She asks what the problem is, how urgent it is, where they are, and whether it's gas, electrical, or plumbing. She knows the language: "boiler losing pressure," "RCD keeps tripping," "first-fix on a new bathroom." She doesn't quote prices — she always says "I'll get him to call you back with a price." No scripts. No menu. No robots.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <span class="step-label">Step 03</span>
         <h3>Job lands in your WhatsApp</h3>
         <p>Name, number, postcode, job type, urgency, time they called. All in one WhatsApp message. One tap to call them back. Done before you're off the ladder.</p>
@@ -944,6 +1178,7 @@
       </div>
     </div>
 
+    <p class="price-sub">Cheaper than half a day of an answering service. Less than 1% of a full-time receptionist. The cost of one boiler service.</p>
     <div class="price-card reveal">
       <div class="price-row">
         <div>
@@ -976,23 +1211,24 @@
       </div>
     </div>
 
-    <div class="quotes reveal">
-      <div class="quote">
-        <div class="quote-mark" aria-hidden="true">"</div>
-        <p>Picked up a £900 boiler swap I would have completely missed. Paid for itself in one morning.</p>
-        <div class="who">Dave H.<small>Plumber · North London</small></div>
+    <div class="quotes demo-cards">
+      <div class="quote reveal">
+        <div class="quote-mark" aria-hidden="true">▶</div>
+        <p>Hear Mae take an emergency call for a Tuesday-night boiler dropout. She gets the postcode, the make, the urgency, and confirms a callback window — without quoting a price.</p>
+        <div class="who">Boiler losing pressure<small>Play 1:42 · Emergency plumbing</small></div>
       </div>
-      <div class="quote">
-        <div class="quote-mark" aria-hidden="true">"</div>
-        <p>It sounds like a person. My customers don't notice. I just get the WhatsApp and ring them back when I'm done.</p>
-        <div class="who">Marcus T.<small>Electrician · Manchester</small></div>
+      <div class="quote reveal">
+        <div class="quote-mark" aria-hidden="true">▶</div>
+        <p>Hear Mae handle a referral asking about a first-fix bathroom in EC1. She confirms scope, asks about the timeline, and books a survey window.</p>
+        <div class="who">First-fix on a new build<small>Play 2:08 · Bathroom</small></div>
       </div>
-      <div class="quote">
-        <div class="quote-mark" aria-hidden="true">"</div>
-        <p>Setup took a phone call. Two days later it was live. I haven't lost a job to voicemail since.</p>
-        <div class="who">Sam R.<small>Gas Engineer · Bristol</small></div>
+      <div class="quote reveal">
+        <div class="quote-mark" aria-hidden="true">▶</div>
+        <p>Hear Mae diagnose enough to qualify the call — and reassure the customer that the engineer is Part P registered.</p>
+        <div class="who">RCD keeps tripping<small>Play 1:25 · Electrical</small></div>
       </div>
     </div>
+    <p class="demo-cta">Want to talk to her yourself? Call <a href="tel:020XXXXXXXX">020 XXXX XXXX</a></p>
   </div>
 </section>
 
@@ -1011,6 +1247,14 @@
       <details>
         <summary>Will my customers know it's AI?</summary>
         <p class="ans">No — and we don't pretend otherwise either. Mae introduces herself by name, sounds natural, and gets the job done. Most callers won't think twice. If asked directly, she's honest.</p>
+      </details>
+      <details>
+        <summary>Will Mae quote my customers a price?</summary>
+        <p class="ans">Never. Mae's job is to take the details and tell the customer you'll call back with pricing. She'll never make up a number, never guess, never commit you to a job value. It's a hard guardrail — we built it on purpose.</p>
+      </details>
+      <details>
+        <summary>Does she handle different UK accents?</summary>
+        <p class="ans">Mae is tested on Geordie, Scouse, Brummie, Glaswegian, Welsh, multicultural London, and most regional varieties. If she ever struggles with a regular customer's accent, we retrain her on real recordings from your line in the weekly review.</p>
       </details>
       <details>
         <summary>What if she gets something wrong?</summary>
@@ -1063,7 +1307,15 @@
   <div class="final-inner">
     <div class="eyebrow" style="color: var(--accent); margin-bottom: 28px;">One phone call to set up. Then you never miss another.</div>
     <h2>Your next missed call is a job<br/>you <em>won't get back.</em></h2>
-    <button class="btn btn-light">Get your number set up →</button>
+    <p class="final-sub">Mae is live in 48 hours. £149 a month. Cheaper than one boiler service.</p>
+    <div class="final-ctas">
+      <button class="btn btn-light">Get your number set up →</button>
+      <a href="tel:020XXXXXXXX" class="final-link">Hear Mae answer a real call →</a>
+    </div>
+    <blockquote class="founder-line">
+      "I run Retinal. I'm one person. Mae works for me as hard as she works for you. If something breaks at 8am, you call my mobile, and I'm on it within an hour. That's the deal."
+      <cite>— Hish, founder</cite>
+    </blockquote>
 
     <div class="final-foot">
       <div class="col">
