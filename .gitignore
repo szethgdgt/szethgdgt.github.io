@@ -1,0 +1,6 @@
+# Claude config
+.claude/
+
+# Skills
+docs/
+skills-lock.json
