@@ -22,7 +22,8 @@
   --ink:      #0F0F0E;
   --ink-soft: #3A3A38;
   --blue:     #1B2DFF;
-  --accent:   #2F62C8;
+  --accent:   #3D6FD4;
+  --blush:    #E8C9C5;
   --muted:    #666666;
   --rule:     #E0DDD8;
   --ghost:    #EDE9E2;
@@ -45,6 +46,17 @@ ul, ol { list-style: none; }
 button { font-family: inherit; cursor: pointer; }
 ::selection { background: var(--accent); color: #fff; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ─── SKIP LINK ──────────────────────────────────────── */
+.skip-link {
+  position: absolute; top: -100%; left: 0;
+  padding: 8px 16px;
+  background: var(--accent); color: #fff;
+  font-size: 13px; font-weight: 500;
+  z-index: 9999;
+  transition: top .2s;
+}
+.skip-link:focus { top: 0; }
 
 /* ─── VISUALLY HIDDEN UTILITY ────────────────────────── */
 .visually-hidden {
@@ -76,8 +88,8 @@ button { font-family: inherit; cursor: pointer; }
 .t-display { font-weight: 700; font-size: clamp(42px, 8vw, 104px); line-height: 0.88; letter-spacing: -0.035em; }
 .t-h1      { font-weight: 700; font-size: clamp(30px, 5vw, 64px);  line-height: 0.95; letter-spacing: -0.025em; }
 .t-h2      { font-weight: 700; font-size: clamp(22px, 3vw, 40px);  line-height: 1.05; letter-spacing: -0.02em; }
-.t-lede    { font-size: clamp(16px, 1.8vw, 20px); line-height: 1.5; letter-spacing: -0.005em; }
-.t-util    { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+.t-lede    { font-size: clamp(16px, 1.8vw, 20px); line-height: 1.35; letter-spacing: 0; }
+.t-util    { font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; }
 
 /* ─── BUTTONS ─────────────────────────────────────────── */
 .btn {
@@ -197,7 +209,7 @@ button { font-family: inherit; cursor: pointer; }
 .side-nav a {
   display: inline-flex; align-items: center; justify-content: flex-end; gap: 12px;
   font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--muted); opacity: 0.55; transition: opacity .25s, color .25s; cursor: pointer;
+  color: var(--muted); transition: opacity .25s, color .25s; cursor: pointer;
 }
 .side-nav a::after { content: ""; display: inline-block; width: 16px; height: 1px; background: currentColor; transition: width .25s, background .25s; }
 .side-nav a:hover { opacity: 1; color: var(--ink); }
@@ -218,7 +230,7 @@ button { font-family: inherit; cursor: pointer; }
 .hero-art { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .hero-art svg { width: 100%; height: 100%; display: block; }
 .hero-body { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: 80px var(--px) 96px; width: 100%; }
-.hero-headline { font-weight: 700; font-size: clamp(40px, 8vw, 108px); line-height: 0.88; letter-spacing: -0.035em; margin-bottom: 28px; }
+.hero-headline { font-weight: 700; font-size: clamp(42px, 8vw, 104px); line-height: 0.88; letter-spacing: -0.035em; margin-bottom: 28px; }
 .hero-sub { font-size: clamp(16px, 1.8vw, 20px); line-height: 1.5; color: var(--ink-soft); max-width: 56ch; margin-bottom: 40px; letter-spacing: -0.005em; }
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 52px; }
 /* ─── HERO META STRIP ─────────────────────────────── */
@@ -236,7 +248,7 @@ button { font-family: inherit; cursor: pointer; }
 .hero-meta-cell:last-child { border-right: none; }
 .hero-meta-label {
   display: block;
-  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
   font-weight: 500; color: var(--muted);
   margin-bottom: 6px;
 }
@@ -270,7 +282,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* ─── HOW IT WORKS ────────────────────────────────────── */
-.hiw-intro { font-weight: 700; font-size: clamp(18px, 2vw, 24px); letter-spacing: -0.015em; margin-bottom: 64px; color: var(--ink-soft); }
+.hiw-intro { font-weight: 700; font-size: clamp(18px, 2vw, 24px); letter-spacing: -0.015em; line-height: 1.1; margin-bottom: 64px; color: var(--ink-soft); }
 .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
 .step-card { padding: 40px 32px; border: 1px solid var(--ink); border-bottom: none; display: flex; flex-direction: column; gap: 24px; }
 .step-card:last-child { border-bottom: 1px solid var(--ink); }
@@ -308,7 +320,7 @@ button { font-family: inherit; cursor: pointer; }
 .maths-table th:nth-child(n+2) { text-align: center; }
 .maths-table td { padding: 18px 24px; font-size: 15px; font-weight: 300; border-bottom: 1px solid var(--rule); vertical-align: middle; }
 .maths-table td:nth-child(n+2) { text-align: center; }
-.maths-table th small { display: block; font-size: 10px; letter-spacing: 0.08em; text-transform: none; color: var(--muted); margin-top: 4px; font-weight: 400; }
+.maths-table th small { display: block; font-size: 12px; letter-spacing: 0.08em; text-transform: none; color: var(--muted); margin-top: 4px; font-weight: 400; }
 .maths-table tr:last-child td { font-weight: 700; background: var(--paper-2); border-bottom: none; }
 .maths-table .big { font-size: 28px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; }
 .maths-accent { color: var(--accent); }
@@ -319,8 +331,8 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 768px) { .split { grid-template-columns: 1fr; } }
 .split-col { padding: 44px 36px; }
 .split-col.dark { background: var(--ink); color: #fff; }
-.split-col h3 { font-size: clamp(18px, 2.2vw, 26px); font-weight: 700; letter-spacing: -0.02em; margin: 12px 0 20px; }
-.split-col p { font-size: 14px; font-weight: 300; line-height: 1.65; color: var(--ink-soft); margin-bottom: 20px; }
+.split-col h3 { font-size: clamp(18px, 2.2vw, 26px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin: 12px 0 20px; }
+.split-col p { font-size: 14px; font-weight: 300; line-height: 1.65; color: var(--ink-soft); margin-bottom: 20px; max-width: 52ch; }
 .split-col.dark p { color: rgba(255,255,255,0.6); }
 .split-col ul { display: flex; flex-direction: column; gap: 10px; }
 .split-col li { font-size: 14px; line-height: 1.6; padding-left: 20px; position: relative; }
@@ -332,8 +344,8 @@ button { font-family: inherit; cursor: pointer; }
 .split-col.dark .split-tag { color: rgba(255,255,255,0.45); }
 
 /* ─── DEMO CALLS ──────────────────────────────────────── */
-.demo-cards { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
-.demo-card { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 36px 32px; display: flex; flex-direction: column; gap: 16px; cursor: default; transition: background 180ms; }
+.demo-cards { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+.demo-card { border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 36px 32px; display: flex; flex-direction: column; gap: 16px; cursor: default; transition: background 180ms; }
 .demo-play { font-size: 32px; color: var(--accent); line-height: 1; }
 .demo-card p { font-size: 15px; font-weight: 300; line-height: 1.6; color: var(--ink); flex: 1; }
 .demo-label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; color: var(--muted); }
@@ -376,7 +388,7 @@ button { font-family: inherit; cursor: pointer; }
 .pricing-setup strong { color: rgba(249,248,246,0.85); }
 /* FAQ column — light text on dark bg */
 .pricing-faq-col { display: flex; flex-direction: column; gap: 0; }
-.pricing-faq-col h3 { font-size: 14px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(249,248,246,0.45); margin-bottom: 20px; }
+.pricing-faq-col h3 { font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(249,248,246,0.45); margin-bottom: 20px; }
 .pricing-faq { border: 1px solid rgba(249,248,246,.15); }
 .pricing-faq .faq-item { border-bottom: 1px solid rgba(249,248,246,.1); }
 .pricing-faq .faq-item:last-child { border-bottom: none; }
@@ -482,7 +494,7 @@ button { font-family: inherit; cursor: pointer; }
 .faq-layout { display: grid; grid-template-columns: 1fr; gap: 48px; }
 @media (min-width: 1024px) { .faq-layout { grid-template-columns: 260px 1fr; gap: 80px; align-items: start; } }
 .faq-sidebar { }
-.faq-sidebar-title { font-weight: 700; font-size: clamp(22px, 3vw, 36px); line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 10px; }
+.faq-sidebar-title { font-weight: 700; font-size: clamp(22px, 3vw, 40px); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 10px; }
 .faq-sidebar-sub { font-size: 14px; line-height: 1.65; color: var(--ink-soft); }
 .faq-list { border: 1px solid var(--ink); }
 .faq-item { border-bottom: 1px solid var(--ink); }
@@ -510,7 +522,7 @@ button { font-family: inherit; cursor: pointer; }
 .final-art { position: absolute; right: 0; bottom: 0; width: 55%; max-width: 680px; opacity: 0.3; pointer-events: none; }
 .final-art svg { width: 100%; display: block; }
 .final-inner { position: relative; max-width: var(--max); margin: 0 auto; }
-.final-hl { font-size: clamp(28px, 4.5vw, 56px); font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; margin: 0 0 28px; max-width: 720px; }
+.final-hl { font-size: clamp(28px, 4.5vw, 56px); font-weight: 700; letter-spacing: -0.035em; line-height: 0.98; margin: 0 0 28px; max-width: 720px; }
 .final-hl em { font-style: italic; color: var(--accent); }
 .final-ctas { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
 .founder-quote { max-width: 600px; margin-bottom: 0; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.1); font-size: 14px; font-weight: 300; font-style: italic; line-height: 1.65; color: rgba(255,255,255,0.65); }
@@ -537,7 +549,7 @@ button { font-family: inherit; cursor: pointer; }
 /* ─── RESPONSIVE ──────────────────────────────────────── */
 @media (max-width: 960px) {
   .steps-grid, .demo-cards { grid-template-columns: 1fr; }
-  .demo-card { border-right: 1px solid var(--rule); }
+  .demo-card { border-right: 1px solid var(--ink); }
   .split { grid-template-columns: 1fr; }
   .final { padding: 80px var(--px) 40px; }
   .maths-table th, .maths-table td { padding: 14px 16px; }
@@ -558,6 +570,16 @@ button { font-family: inherit; cursor: pointer; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .mobile-menu, .ham span { transition: none; }
+  .skip-link { transition: none; }
+  .faq-ans { transition: none; }
+  .faq-chevron { transition: none; }
+  .faq-q { transition: none; }
+  .btn { transition: none; }
+  .nav { transition: none; }
+  .nav-link::after { transition: none; }
+  .nav-logo-col, .nav-logo { transition: none; }
+  .mobile-scrim { transition: none; }
+  .side-nav a { transition: none; }
 }
 </style>
 </head>
@@ -567,7 +589,7 @@ button { font-family: inherit; cursor: pointer; }
 <div class="page-frame" aria-hidden="true"></div>
 
 <!-- ─── SKIP LINK ────────────────────────────────────── -->
-<a href="#main-content" style="position:absolute;top:-100%;left:0;padding:8px 16px;background:var(--accent);color:#fff;font-size:13px;font-weight:500;z-index:9999;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-100%'">Skip to content</a>
+<a href="#main-content" class="skip-link">Skip to content</a>
 
 <!-- ─── NAV ──────────────────────────────────────────── -->
 <nav class="nav" id="nav" aria-label="Main navigation">
@@ -587,7 +609,7 @@ button { font-family: inherit; cursor: pointer; }
       <li><a href="#faq"           class="nav-link" data-section="faq">FAQ</a></li>
     </ul>
 
-    <a href="#final-cta" class="btn btn-primary nav-cta" style="font-size:12px;padding:10px 18px;min-height:40px;">Get Started →</a>
+    <a href="#final-cta" class="btn btn-primary nav-cta" style="font-size:12px;padding:10px 18px;min-height:44px;">Get Started →</a>
 
     <button class="ham" id="ham" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -605,7 +627,7 @@ button { font-family: inherit; cursor: pointer; }
     <a href="#setup"        class="mm-link">Setup</a>
     <a href="#faq"          class="mm-link">FAQ</a>
   </div>
-  <button class="mm-cta" id="mmCta">Get Started →</button>
+  <button class="mm-cta" id="mmCta" type="button">Get Started →</button>
 </div>
 
 <!-- sticky side-nav (desktop ≥1280px) -->
@@ -623,7 +645,7 @@ button { font-family: inherit; cursor: pointer; }
 <main id="main-content">
 
 <!-- ─── HERO ─────────────────────────────────────────── -->
-<header class="hero" id="hero">
+<section class="hero" id="hero" aria-labelledby="hero-h1">
   <!-- V2 geometric linework — full-bleed SVG art in cobalt blue -->
   <div class="hero-art" aria-hidden="true">
     <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
@@ -717,7 +739,7 @@ button { font-family: inherit; cursor: pointer; }
     <p class="hero-descriptor reveal" style="transition-delay:40ms">The AI Receptionist for UK Tradespeople</p>
 
     <p class="hero-sub reveal" style="transition-delay:55ms">
-      Retinal answers the calls you miss while you're on the tools. Job details land in your WhatsApp before you're off the ladder. No dashboards. No onboarding. You just crack on.
+      Retinal answers the calls you miss while you're on the tools. Job details land in your WhatsApp before you're off the ladder. No dashboards. No complicated setup. You just crack on.
     </p>
 
     <div class="hero-ctas reveal" style="transition-delay:115ms">
@@ -725,7 +747,7 @@ button { font-family: inherit; cursor: pointer; }
       <a href="#demo"      class="btn btn-secondary">Hear a real call →</a>
     </div>
 
-    <div class="hero-meta reveal" style="transition-delay:175ms" aria-label="Key facts">
+    <div class="hero-meta reveal" role="group" style="transition-delay:175ms" aria-label="Key facts">
       <div class="hero-meta-cell">
         <span class="hero-meta-label">Setup</span>
         <span class="hero-meta-value">48 hours</span>
@@ -744,7 +766,7 @@ button { font-family: inherit; cursor: pointer; }
       </div>
     </div>
   </div>
-</header>
+</section>
 
 <!-- ─── HOW IT WORKS ──────────────────────────────────── -->
 <section class="section" id="how-it-works" aria-labelledby="hiw-h2">
@@ -779,7 +801,7 @@ button { font-family: inherit; cursor: pointer; }
           <li>Speaks naturally, handles trade vocabulary</li>
           <li>Knows first-fix, RCD trips, Gas Safe, powerflush</li>
           <li>Gets the name, number, postcode, job type, urgency</li>
-          <li>Never quotes a price — always: "I'll get him to call you back"</li>
+          <li>Never quotes a price by default — always: "I'll get him to call you back"</li>
         </ul>
         <!-- Placeholder: replace with call transcript visual -->
         <div class="step-img-placeholder">Step 2 — call transcript visual</div>
@@ -810,7 +832,7 @@ button { font-family: inherit; cursor: pointer; }
   <div class="section-inner">
     <div class="maths-head">
       <div>
-        <h2 id="maths-h2" class="t-h1 reveal">The cost of a<br>missed call<span class="dot">.</span></h2>
+        <h2 id="maths-h2" class="t-h2 reveal">The cost of a<br>missed call<span class="dot">.</span></h2>
       </div>
       <p class="t-lede reveal" style="transition-delay:55ms;color:var(--ink-soft);align-self:end">
         Real UK job values, realistic conversion rates. This isn't made up.
@@ -862,13 +884,13 @@ button { font-family: inherit; cursor: pointer; }
             <td><strong>£280 avg job</strong></td>
             <td><strong>40–50% conversion</strong></td>
             <td>
-              <span class="big maths-accent" data-counter="£1120" data-suffix="">£1,120</span>
+              <span class="big maths-accent" data-counter="£1120" data-suffix="" aria-live="polite" aria-atomic="true">£1,120</span>
             </td>
             <td>
-              <span class="big" data-counter="£149" data-suffix="">£149</span>
+              <span class="big" data-counter="£149" data-suffix="" aria-live="polite" aria-atomic="true">£149</span>
             </td>
             <td>
-              <span class="big maths-accent" data-counter="£971" data-suffix="">£971</span>
+              <span class="big maths-accent" data-counter="£971" data-suffix="" aria-live="polite" aria-atomic="true">£971</span>
             </td>
           </tr>
         </tbody>
@@ -900,10 +922,10 @@ button { font-family: inherit; cursor: pointer; }
       </div>
       <div class="split-col dark">
         <span class="split-tag">What Retinal won't do</span>
-        <h3>The things only you should decide.</h3>
+        <h3>Where Retinal always steps back.</h3>
         <p>Retinal is a receptionist, not a salesperson or estimator. It knows its lane. You stay in charge of the decisions that matter.</p>
         <ul>
-          <li>Quote a price for any job</li>
+          <li>Quote a price unprompted — by default Retinal defers all pricing to you</li>
           <li>Confirm availability or book a date</li>
           <li>Make commitments on your behalf</li>
           <li>Discuss call-out charges</li>
@@ -990,66 +1012,66 @@ button { font-family: inherit; cursor: pointer; }
     </svg>
   </div>
   <div class="section-inner">
-    <h2 id="pricing-h2" class="t-h1 reveal" style="margin-bottom:48px;max-width:22ch">£149 a month. No contracts. Cancel with 30 days' notice.</h2>
+    <h2 id="pricing-h2" class="t-h2 reveal" style="margin-bottom:48px;max-width:22ch">£149 a month. No contracts. Cancel with 30 days' notice.</h2>
 
     <div class="pricing-layout">
 
       <!-- Left: FAQ -->
       <div class="pricing-faq-col reveal" style="transition-delay:40ms">
         <h3>Common questions</h3>
-        <div class="pricing-faq faq-list">
-          <div class="faq-item">
-            <button class="faq-q" aria-expanded="false" aria-controls="pfaq1">
+        <div class="pricing-faq faq-list" role="list">
+          <div class="faq-item" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq1" id="pfaq1-btn">
               <span>Is 150 minutes enough for me?</span>
               <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <div class="faq-ans" id="pfaq1">
+            <div class="faq-ans" id="pfaq1" role="region" aria-labelledby="pfaq1-btn">
               <div class="faq-ans-inner">Most solo tradespeople average 60–90 minutes of inbound calls per month. 150 minutes is generous headroom — the vast majority of customers never go near the limit. If you're running a busier operation, just ask us and we'll tell you honestly whether you need more.</div>
             </div>
           </div>
-          <div class="faq-item">
-            <button class="faq-q" aria-expanded="false" aria-controls="pfaq2">
+          <div class="faq-item" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq2" id="pfaq2-btn">
               <span>What if I go over 150 minutes?</span>
               <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <div class="faq-ans" id="pfaq2">
+            <div class="faq-ans" id="pfaq2" role="region" aria-labelledby="pfaq2-btn">
               <div class="faq-ans-inner">You're charged £0.80/min for any time beyond your included 150 minutes. Most solo tradespeople use well under their limit — but if you do go over, you'll see it on your next bill with a full call-by-call breakdown.</div>
             </div>
           </div>
-          <div class="faq-item">
-            <button class="faq-q" aria-expanded="false" aria-controls="pfaq3">
+          <div class="faq-item" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq3" id="pfaq3-btn">
               <span>Is there a contract?</span>
               <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <div class="faq-ans" id="pfaq3">
+            <div class="faq-ans" id="pfaq3" role="region" aria-labelledby="pfaq3-btn">
               <div class="faq-ans-inner">No. It's month-to-month after your first month. If you want to cancel, give us 30 days' notice — no exit fee, no awkward conversation. We'd rather earn your business every month than lock you in.</div>
             </div>
           </div>
-          <div class="faq-item">
-            <button class="faq-q" aria-expanded="false" aria-controls="pfaq4">
+          <div class="faq-item" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq4" id="pfaq4-btn">
               <span>Can I pause it?</span>
               <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <div class="faq-ans" id="pfaq4">
+            <div class="faq-ans" id="pfaq4" role="region" aria-labelledby="pfaq4-btn">
               <div class="faq-ans-inner">Yes. If you're going on holiday or have a quiet spell, just let us know and we'll update the agent so it tells callers exactly when you're back — "I can take your details but just to let you know, [Name] is back on [date] and will call you then." Your number stays live, no leads slip through, and you pick up exactly where you left off.</div>
             </div>
           </div>
-          <div class="faq-item">
-            <button class="faq-q" aria-expanded="false" aria-controls="pfaq5">
+          <div class="faq-item" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq5" id="pfaq5-btn">
               <span>Does it work with my existing number?</span>
               <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <div class="faq-ans" id="pfaq5">
+            <div class="faq-ans" id="pfaq5" role="region" aria-labelledby="pfaq5-btn">
               <div class="faq-ans-inner">Yes. Retinal doesn't replace your number — it covers it. When a call goes unanswered or you're engaged, it forwards to Retinal automatically. Your number stays yours. Customers never know they've been redirected.</div>
             </div>
           </div>
@@ -1065,7 +1087,7 @@ button { font-family: inherit; cursor: pointer; }
           </div>
           <ul>
             <li><span>150 minutes included</span><span>around 100–150 calls per month</span></li>
-            <li><span>Done-for-you setup</span><span>48 hours, one phone call</span></li>
+            <li><span>Done-for-you setup</span><span>demo call, short form, live in 48 hours</span></li>
             <li><span>WhatsApp lead delivery</span><span>real-time, every call</span></li>
             <li><span>Weekly QA review</span><span>real person checks your calls, every week</span></li>
             <li><span>Cancel</span><span>30 days' notice, no exit fee</span></li>
@@ -1073,7 +1095,7 @@ button { font-family: inherit; cursor: pointer; }
           <a href="#final-cta" class="btn btn-primary">Get Started →</a>
         </div>
         <p class="pricing-setup">
-          One-off setup fee: <strong>£99</strong>. Waived if you pay annually (<strong>£1,600/yr</strong> — saves £188).
+          One-off setup fee: <strong>£99</strong>. Waived if you pay annually (<strong>£1,600/yr</strong> — saves £188 on the subscription, plus the £99 setup fee).
         </p>
       </div>
 
@@ -1084,33 +1106,33 @@ button { font-family: inherit; cursor: pointer; }
 <!-- ─── SETUP TIMELINE ────────────────────────────────── -->
 <section class="section" id="setup" aria-labelledby="setup-h2">
   <div class="section-inner">
-    <h2 id="setup-h2" class="t-h1 reveal" style="margin-bottom:16px;max-width:18ch">Live in 48 hours<span class="dot">.</span></h2>
-    <p class="setup-sub reveal" style="transition-delay:40ms">One phone call. No dashboards. No forms to fill in.</p>
+    <h2 id="setup-h2" class="t-h2 reveal" style="margin-bottom:16px;max-width:18ch">Live in 48 hours<span class="dot">.</span></h2>
+    <p class="setup-sub reveal" style="transition-delay:40ms">A quick call. A short form. Then you're done.</p>
 
-    <div class="setup-grid reveal" style="transition-delay:80ms">
+    <div class="setup-grid reveal" style="transition-delay:80px">
 
       <div class="setup-card">
-        <span class="setup-hour">Hour 0</span>
-        <h3 class="setup-title">You sign up</h3>
-        <p class="setup-body">Fill in one short form — your trade, your area, your usual jobs. Takes about five minutes. That's the brief.</p>
+        <span class="setup-hour">Step 1</span>
+        <h3 class="setup-title">Book a demo call</h3>
+        <p class="setup-body">A 20-minute call with us. We walk through how Retinal works for your trade, what you can customise, and whether it's the right fit. No hard sell — just an honest conversation.</p>
       </div>
 
       <div class="setup-card">
-        <span class="setup-hour">Hour 2</span>
-        <h3 class="setup-title">We call you</h3>
-        <p class="setup-body">A 20-minute call to go over the brief, hear how you want to sound, and ask anything we couldn't get from the form.</p>
+        <span class="setup-hour">Step 2</span>
+        <h3 class="setup-title">We send your onboarding pack</h3>
+        <p class="setup-body">Once you're signed up, we send a short onboarding form. You tell us your services, areas covered, anything specific you want the agent to mention — takes about five minutes.</p>
       </div>
 
       <div class="setup-card">
-        <span class="setup-hour">Hour 36</span>
-        <h3 class="setup-title">Retinal is trained</h3>
-        <p class="setup-body">We build your agent, run it through a hundred test calls, and send you three sample recordings to approve.</p>
+        <span class="setup-hour">Step 3 · ~36 hrs</span>
+        <h3 class="setup-title">We build and test your agent</h3>
+        <p class="setup-body">We configure your agent from your brief, run it through a set of test calls, and send you three sample recordings to approve. You sign off before anything goes live.</p>
       </div>
 
       <div class="setup-card">
-        <span class="setup-hour">Hour 48</span>
+        <span class="setup-hour">Step 4 · 48 hrs</span>
         <h3 class="setup-title">You go live</h3>
-        <p class="setup-body">We flip the call-forward on. Retinal starts answering. You start getting WhatsApp leads. That's it.</p>
+        <p class="setup-body">We flip the call-forward on. Retinal starts answering. You start getting WhatsApp leads. That's it — nothing for you to touch.</p>
       </div>
 
     </div>
@@ -1119,7 +1141,7 @@ button { font-family: inherit; cursor: pointer; }
 
 <!-- ─── TICKER STRIP ──────────────────────────────────── -->
 <div class="ticker-outer">
-<div class="ticker" role="marquee" aria-label="Customer reviews">
+<div class="ticker" aria-live="off" aria-label="Customer reviews">
   <div class="ticker-track">
     <!-- Set 1 -->
     <div class="ticker-card">
@@ -1138,7 +1160,7 @@ button { font-family: inherit; cursor: pointer; }
       <span class="ticker-card-text">"Had a customer ring back and say 'your receptionist was really helpful.' There is no receptionist. That tells you everything."<span class="ticker-card-attr">— Craig W. · Electrician · Leeds</span></span>
     </div>
     <div class="ticker-card">
-      <span class="ticker-card-text">"First week it caught a boiler breakdown call at 7am while I was on the school run. £320 job. Paid for four months in one call."<span class="ticker-card-attr">— Paul M. · Gas Engineer · South London</span></span>
+      <span class="ticker-card-text">"First week it caught a boiler breakdown call at 7am while I was on the school run. £320 job. Paid for two months in one call."<span class="ticker-card-attr">— Paul M. · Gas Engineer · South London</span></span>
     </div>
     <!-- Set 2 — duplicate for seamless loop -->
     <div class="ticker-card">
@@ -1157,7 +1179,7 @@ button { font-family: inherit; cursor: pointer; }
       <span class="ticker-card-text">"Had a customer ring back and say 'your receptionist was really helpful.' There is no receptionist. That tells you everything."<span class="ticker-card-attr">— Craig W. · Electrician · Leeds</span></span>
     </div>
     <div class="ticker-card">
-      <span class="ticker-card-text">"First week it caught a boiler breakdown call at 7am while I was on the school run. £320 job. Paid for four months in one call."<span class="ticker-card-attr">— Paul M. · Gas Engineer · South London</span></span>
+      <span class="ticker-card-text">"First week it caught a boiler breakdown call at 7am while I was on the school run. £320 job. Paid for two months in one call."<span class="ticker-card-attr">— Paul M. · Gas Engineer · South London</span></span>
     </div>
   </div>
 </div>
@@ -1176,82 +1198,82 @@ button { font-family: inherit; cursor: pointer; }
       <div class="faq-list reveal" style="transition-delay:60ms" role="list">
 
         <div class="faq-item" role="listitem">
-          <button class="faq-q" aria-expanded="false" aria-controls="fa1">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa1" id="fa1-btn">
             <span>Will my customers know it's AI?</span>
             <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="faq-ans" id="fa1">
+          <div class="faq-ans" id="fa1" role="region" aria-labelledby="fa1-btn">
             <div class="faq-ans-inner">Most won't. The agent answers professionally, uses trade language correctly, and doesn't behave like a chatbot. If a customer asks directly, it says it's a virtual assistant. We don't lie — we don't need to.</div>
           </div>
         </div>
 
         <div class="faq-item" role="listitem">
-          <button class="faq-q" aria-expanded="false" aria-controls="fa2">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa2" id="fa2-btn">
             <span>Will Retinal quote my customers a price?</span>
             <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="faq-ans" id="fa2">
-            <div class="faq-ans-inner">No. Never. Retinal always says it'll get you to call them back with a price. Quoting is your job — Retinal just makes sure you know the job exists.</div>
+          <div class="faq-ans" id="fa2" role="region" aria-labelledby="fa2-btn">
+            <div class="faq-ans-inner">By default, no. Retinal will always tell callers that you'll call them back with a price — keeping quoting firmly in your hands. If you'd like Retinal to share a set call-out charge or a fixed rate for a specific job type, that's configurable during setup. Most tradespeople leave it switched off, but the choice is yours.</div>
           </div>
         </div>
 
         <div class="faq-item" role="listitem">
-          <button class="faq-q" aria-expanded="false" aria-controls="fa3">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa3" id="fa3-btn">
             <span>Does it handle different UK accents?</span>
             <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="faq-ans" id="fa3">
+          <div class="faq-ans" id="fa3" role="region" aria-labelledby="fa3-btn">
             <div class="faq-ans-inner">Yes. The agent handles a wide range of UK regional accents. Your weekly QA review catches any misunderstandings and we retrain the agent on your specific caller patterns over time.</div>
           </div>
         </div>
 
         <div class="faq-item" role="listitem">
-          <button class="faq-q" aria-expanded="false" aria-controls="fa4">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa4" id="fa4-btn">
             <span>What if it gets something wrong?</span>
             <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="faq-ans" id="fa4">
+          <div class="faq-ans" id="fa4" role="region" aria-labelledby="fa4-btn">
             <div class="faq-ans-inner">Every week, a real person reviews a sample of your calls, checks for slips, and retrains the agent. If something comes through wrong, we make it right. It's not set-and-forget — it gets better over time.</div>
           </div>
         </div>
 
         <div class="faq-item" role="listitem">
-          <button class="faq-q" aria-expanded="false" aria-controls="fa5">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa5" id="fa5-btn">
             <span>How long does setup take?</span>
             <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="faq-ans" id="fa5">
-            <div class="faq-ans-inner">One phone call with us. 48 hours until you're live. We handle the number, the routing, everything. You don't touch a setting.</div>
+          <div class="faq-ans" id="fa5" role="region" aria-labelledby="fa5-btn">
+            <div class="faq-ans-inner">Book a demo call first — we walk through everything together. If you decide to go ahead, we send you a short onboarding form covering your services, areas, and how you want the agent to handle calls. Then we build, test, and get you live within 48 hours. You don't touch a setting.</div>
           </div>
         </div>
 
         <div class="faq-item" role="listitem">
-          <button class="faq-q" aria-expanded="false" aria-controls="fa6">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa6" id="fa6-btn">
             <span>Can I cancel anytime?</span>
             <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="faq-ans" id="fa6">
+          <div class="faq-ans" id="fa6" role="region" aria-labelledby="fa6-btn">
             <div class="faq-ans-inner">Yes. 30 days' notice. No long contract. No exit fee. No small print designed to trap you. If it's not working, we won't make it painful to leave.</div>
           </div>
         </div>
 
         <div class="faq-item" role="listitem">
-          <button class="faq-q" aria-expanded="false" aria-controls="fa7">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa7" id="fa7-btn">
             <span>What trades do you work with?</span>
             <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="faq-ans" id="fa7">
+          <div class="faq-ans" id="fa7" role="region" aria-labelledby="fa7-btn">
             <div class="faq-ans-inner">Plumbers, electricians, and gas engineers — specifically trained for these trades. The agent knows first-fix from second-fix, what a Gas Safe number is, what a powerflush involves. Call us if you're not sure whether your trade fits.</div>
           </div>
         </div>
 
         <div class="faq-item" role="listitem">
-          <button class="faq-q" aria-expanded="false" aria-controls="fa8">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa8" id="fa8-btn">
             <span>What happens to the call recordings?</span>
             <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="faq-ans" id="fa8">
-            <div class="faq-ans-inner">Stored encrypted in the UK for 90 days, then permanently deleted. Used only for QA and agent improvement. Never sold. Never shared with third parties. ICO registered (ZB 891 204), GDPR and UK Data Protection Act 2018 compliant.</div>
+          <div class="faq-ans" id="fa8" role="region" aria-labelledby="fa8-btn">
+            <div class="faq-ans-inner">Stored encrypted in the UK for 30 days, then permanently deleted. Used only for QA and agent improvement. Never sold. Never shared with third parties. ICO registered (ZB 891 204), GDPR and UK Data Protection Act 2018 compliant.</div>
           </div>
         </div>
 
@@ -1263,7 +1285,7 @@ button { font-family: inherit; cursor: pointer; }
 </main>
 
 <!-- ─── FOOTER / FINAL CTA ────────────────────────────── -->
-<footer class="final" id="final-cta" aria-label="Get started and site footer">
+<footer class="final" id="final-cta">
 
   <!-- Background geometric art — concentric circles in accent blue -->
   <div class="final-art" aria-hidden="true">
