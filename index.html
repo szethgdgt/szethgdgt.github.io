@@ -4,754 +4,616 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="color-scheme" content="light" />
-<title>Retinal — Never miss a job</title>
+<title>Retinal — Never miss a job again</title>
+<meta name="description" content="Retinal answers the calls you miss while you're on the tools. Job details land in your WhatsApp before you're off the ladder. £149/month. Live in 48 hours." />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    color-scheme: light;
-    --bg: #f9f8f6;
-    --ink: #0f0f0e;
-    --accent: #3d6fd4;
-    --body: #555555;
-    --muted: #666666;
-    --rule: #e0ddd8;
-    --ghost: #ede9e2;
-    --frame-left: 72px;
-  }
-  @media (max-width: 768px) {
-    :root { --frame-left: 56px; }
-  }
 
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    font-weight: 300;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
+/* ─── TOKENS ──────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+  --paper:    #F4F1EB;
+  --paper-2:  #EDE8DE;
+  --bone:     #F9F8F6;
+  --ink:      #0F0F0E;
+  --ink-soft: #3A3A38;
+  --blue:     #1B2DFF;
+  --accent:   #3D6FD4;
+  --muted:    #666666;
+  --rule:     #E0DDD8;
+  --ghost:    #EDE9E2;
+  --ease-out:   cubic-bezier(0.23, 1, 0.32, 1);
+  --max:        1280px;
+  --px:         40px;
+  --nav-h:      64px;
+  --frame-left: 72px;
+}
+@media (max-width: 1279px) and (min-width: 769px) { :root { --frame-left: 56px; } }
+@media (max-width: 768px) { :root { --px: 20px; --nav-h: 56px; } }
 
-  /* ---------- Page frame (technical-drawing border) ---------- */
-  .page-frame {
-    position: fixed; inset: 0;
-    top: env(safe-area-inset-top);
-    pointer-events: none;
-    z-index: 60;
-  }
+/* ─── RESET ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 400; line-height: 1.5; color: var(--ink); background: var(--paper); overflow-x: hidden; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+button { font-family: inherit; cursor: pointer; }
+::selection { background: var(--accent); color: #fff; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ─── PAGE FRAME (V2) ────────────────────────────────── */
+.page-frame {
+  position: fixed; inset: 0;
+  top: env(safe-area-inset-top, 0px);
+  pointer-events: none; z-index: 60;
+}
+.page-frame::before,
+.page-frame::after {
+  content: ""; position: absolute;
+  top: 0; bottom: 0; width: 1px;
+  background: var(--ink);
+}
+.page-frame::before { left: var(--frame-left); }
+.page-frame::after  { right: 0; }
+@media (max-width: 1279px) {
   .page-frame::before,
-  .page-frame::after {
-    content: "";
-    position: absolute;
-    top: 0; bottom: 0;
-    width: 1px;
-    background: var(--ink);
-  }
-  .page-frame::before { left: var(--frame-left); }
-  .page-frame::after  { right: 0; }
-  @media (max-width: 1279px) {
-    .page-frame::before,
-    .page-frame::after { display: none; }
-  }
+  .page-frame::after { display: none; }
+}
 
-  ::selection { background: var(--accent); color: #fff; }
+/* ─── TYPOGRAPHY ──────────────────────────────────────── */
+.t-display { font-weight: 700; font-size: clamp(42px, 8vw, 104px); line-height: 0.88; letter-spacing: -0.035em; }
+.t-h1      { font-weight: 700; font-size: clamp(30px, 5vw, 64px);  line-height: 0.95; letter-spacing: -0.025em; }
+.t-h2      { font-weight: 700; font-size: clamp(22px, 3vw, 40px);  line-height: 1.05; letter-spacing: -0.02em; }
+.t-lede    { font-size: clamp(16px, 1.8vw, 20px); line-height: 1.5; letter-spacing: -0.005em; }
+.t-util    { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
 
-  a { color: inherit; text-decoration: none; }
+/* ─── BUTTONS ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 22px; min-height: 48px;
+  font-weight: 700; font-size: 14px; letter-spacing: -0.005em;
+  border-radius: 0; white-space: nowrap; cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 180ms var(--ease-out), color 180ms var(--ease-out), border-color 180ms var(--ease-out);
+  user-select: none; -webkit-user-select: none;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary  { background: var(--ink); color: var(--bone); border: 1.5px solid var(--ink); }
+.btn-primary:hover  { background: var(--ink-soft); border-color: var(--ink-soft); }
+.btn-secondary { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+.btn-secondary:hover { background: var(--ink); color: var(--bone); }
+.btn-bone { background: var(--bone); color: var(--ink); border: 1.5px solid var(--bone); }
+.btn-bone:hover { background: var(--paper); border-color: var(--paper); }
 
-  button, a { -webkit-tap-highlight-color: transparent; }
+/* ─── LAYOUT SHELL ────────────────────────────────────── */
+.section { position: relative; padding: 96px var(--px); border-top: 1px solid var(--rule); }
+.section-inner { max-width: var(--max); margin: 0 auto; position: relative; }
+.dot { color: var(--blue); }
 
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-  }
+/* ─── NAV ─────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 55;
+  background: var(--paper);
+  border-bottom: 1px solid var(--ink);
+  padding: env(safe-area-inset-top) 0 0;
+  display: flex; align-items: stretch;
+  transition: background-color 240ms var(--ease-out), box-shadow 240ms var(--ease-out);
+}
+.nav.scrolled { background: var(--bone); box-shadow: 0 1px 0 rgba(15,15,14,.14), 0 4px 24px rgba(15,15,14,.06); }
+/* Logo column — width matches --frame-left, sits within left margin border */
+.nav-logo-col {
+  width: var(--frame-left); flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-right: 1px solid var(--rule);
+  transition: opacity 160ms var(--ease-out);
+}
+.nav-logo-col:hover { opacity: 0.7; }
+.nav-logo-img { width: 44px; height: 44px; object-fit: contain; display: block; }
+.nav-inner {
+  flex: 1;
+  max-width: calc(var(--max) + var(--px) * 2); margin: 0 auto;
+  padding: 0 var(--px);
+  height: var(--nav-h);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 32px;
+}
+.nav-logo {
+  font-weight: 700; font-size: 21px; letter-spacing: -0.055em; line-height: 1;
+  transition: opacity 160ms var(--ease-out); flex-shrink: 0;
+}
+.nav-logo:hover { opacity: 0.6; }
+.nav-links { display: none; align-items: center; gap: 4px; }
+@media (min-width: 768px) { .nav-links { display: flex; } }
+.nav-link {
+  font-size: 13px; font-weight: 500; letter-spacing: -0.01em;
+  color: var(--ink-soft); padding: 8px 14px; position: relative;
+  transition: color 160ms var(--ease-out);
+}
+.nav-link::after {
+  content: ''; position: absolute; bottom: 0; left: 14px; right: 14px;
+  height: 1px; background: var(--blue);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 220ms var(--ease-out);
+}
+.nav-link.active { color: var(--ink); }
+.nav-link.active::after { transform: scaleX(1); }
+.nav-link:hover { color: var(--ink); }
+.nav-cta { display: none; }
+@media (min-width: 768px) { .nav-cta { display: inline-flex; } }
 
-  .nav-links a:focus-visible {
-    outline-offset: 4px;
-    border-radius: 2px;
-  }
-  .nav-cta:focus-visible {
-    outline-offset: 5px;
-    border-radius: 4px;
-  }
-  .btn:focus-visible {
-    outline-offset: 2px;
-  }
-  .faq summary:focus-visible {
-    outline-offset: 4px;
-    border-radius: 2px;
-  }
+/* hamburger */
+.ham { display: flex; flex-direction: column; justify-content: space-between; width: 22px; height: 15px; background: none; border: none; cursor: pointer; padding: 0; }
+@media (min-width: 768px) { .ham { display: none; } }
+.ham span { display: block; width: 100%; height: 1.5px; background: var(--ink); transform-origin: center; transition: transform 220ms var(--ease-out), opacity 160ms var(--ease-out); }
+.ham.open span:nth-child(1) { transform: translateY(6.75px) rotate(45deg); }
+.ham.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.ham.open span:nth-child(3) { transform: translateY(-6.75px) rotate(-45deg); }
 
-  /* ---------- Nav ---------- */
-  .nav {
-    position: sticky; top: 0; z-index: 55;
-    background: var(--bg);
-    display: flex; align-items: stretch;
-    padding: env(safe-area-inset-top) 0 0;
-    border-bottom: 1px solid var(--ink);
-  }
-  .logo {
-    width: var(--frame-left);
-    flex-shrink: 0;
-    display: inline-flex; align-items: center; justify-content: center;
-    text-decoration: none;
-  }
-  .logo-mark {
-    width: 44px; height: 44px;
-    display: block;
-  }
-  .logo-mark img {
-    width: 100%; height: 100%; display: block; object-fit: contain;
-  }
-  .nav-body {
-    flex: 1;
-    display: flex; align-items: center;
-    padding: 18px 40px;
-    gap: 40px;
-  }
-  .wordmark {
-    font-weight: 700; letter-spacing: 0.18em;
-    font-size: 12px; text-transform: uppercase;
-    color: var(--ink);
-    white-space: nowrap;
-  }
-  .nav-center {
-    display: flex; align-items: center;
-    gap: 40px;
-    flex: 1;
-  }
-  .nav-links {
-    display: flex; align-items: center;
-    gap: 32px;
-    font-weight: 500;
-  }
-  .nav-links a {
-    display: inline-flex; align-items: baseline; gap: 8px;
-    font-size: 13px;
-    color: var(--ink);
-    transition: color .2s;
-    line-height: 1.1;
-  }
-  .nav-links a .num {
-    font-size: 9px;
-    font-weight: 500;
-    color: var(--muted);
-    letter-spacing: 0.12em;
-    position: relative; top: -6px;
-  }
-  .nav-links a:hover { color: var(--accent); }
-  .nav-links a:hover .num { color: var(--accent); }
-  .nav-cta {
-    display: inline-flex; align-items: center; gap: 14px;
-    font-size: 13px; font-weight: 500;
-    color: var(--ink);
-    cursor: pointer;
-    background: none; border: 0; padding: 0;
-    font-family: inherit;
-  }
-  .nav-cta .arrow-btn {
-    width: 32px; height: 32px;
-    border: 1px solid var(--ink);
-    border-radius: 50%;
-    display: inline-flex; align-items: center; justify-content: center;
-    transition: background .2s, color .2s, transform .2s;
-  }
-  .nav-cta:hover .arrow-btn { background: var(--ink); color: #fff; transform: translateX(2px); }
-  .nav-cta svg { width: 12px; height: 12px; display: block; }
+/* mobile drawer */
+.mobile-menu {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: var(--paper); border-bottom: 1px solid var(--ink);
+  z-index: 54;
+  transform: translateY(-100%);
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+  padding: calc(var(--nav-h) + 24px) var(--px) 28px;
+}
+.mobile-menu.open { transform: translateY(0); }
+.mobile-menu .mm-links { display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.mobile-menu .mm-links a {
+  display: block; padding: 20px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 22px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
+}
+.mobile-menu .mm-links a:hover { color: var(--accent); }
+.mobile-menu .mm-cta {
+  margin-top: 24px; display: block; width: 100%; padding: 18px;
+  text-align: center; background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700; letter-spacing: -0.005em;
+  border: none; font-family: inherit; cursor: pointer;
+}
+.mobile-scrim { position: fixed; inset: 0; background: rgba(15,15,14,.18); z-index: 53; opacity: 0; pointer-events: none; transition: opacity .25s; }
+.mobile-scrim.open { opacity: 1; pointer-events: auto; }
+@media (min-width: 769px) { .mobile-menu, .mobile-scrim { display: none !important; } }
 
-  /* hamburger (mobile) */
-  .hamburger {
-    display: none;
-    width: 44px; height: 44px;
-    border: 1px solid var(--ink);
-    border-radius: 50%;
-    background: transparent;
-    align-items: center; justify-content: center;
-    cursor: pointer;
-    padding: 0;
-  }
-  .hamburger span {
-    display: block;
-    width: 14px; height: 1px; background: var(--ink);
-    position: relative;
-  }
-  .hamburger span::before,
-  .hamburger span::after {
-    content: ""; position: absolute; left: 0;
-    width: 14px; height: 1px; background: var(--ink);
-  }
-  .hamburger span::before { top: -5px; }
-  .hamburger span::after  { top: 5px; }
+/* ─── SIDE NAV ────────────────────────────────────────── */
+.side-nav {
+  position: fixed; top: 50%; right: 24px;
+  transform: translateY(-50%);
+  z-index: 40; display: none; flex-direction: column; gap: 14px; text-align: right;
+}
+.side-nav a {
+  display: inline-flex; align-items: center; justify-content: flex-end; gap: 12px;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted); opacity: 0.55; transition: opacity .25s, color .25s; cursor: pointer;
+}
+.side-nav a::after { content: ""; display: inline-block; width: 16px; height: 1px; background: currentColor; transition: width .25s, background .25s; }
+.side-nav a:hover { opacity: 1; color: var(--ink); }
+.side-nav a.active { color: var(--accent); opacity: 1; }
+.side-nav a.active::after { width: 28px; background: var(--accent); }
+@media (min-width: 1280px) { .side-nav { display: flex; } }
 
-  /* mobile menu drawer */
-  .mobile-menu {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    background: var(--bg);
-    border-bottom: 1px solid var(--ink);
-    z-index: 54;
-    transform: translateY(-100%);
-    transition: transform .35s cubic-bezier(.4,0,.2,1);
-    padding: 96px 24px 32px;
-  }
-  .mobile-menu.open { transform: translateY(0); }
-  .mobile-menu .mm-links {
-    display: flex; flex-direction: column;
-    border-top: 1px solid var(--rule);
-  }
-  .mobile-menu .mm-links a {
-    display: flex; align-items: baseline; gap: 14px;
-    padding: 22px 0;
-    border-bottom: 1px solid var(--rule);
-    font-size: 22px; font-weight: 500;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-  }
-  .mobile-menu .mm-links .num {
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 500;
-    letter-spacing: 0.12em;
-  }
-  .mobile-menu .mm-cta {
-    margin-top: 28px;
-    display: block; width: 100%;
-    padding: 18px;
-    text-align: center;
-    background: var(--ink); color: #fff;
-    font-size: 11px; font-weight: 500;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    border: 0;
-    font-family: inherit;
-    cursor: pointer;
-  }
-  .mobile-scrim {
-    position: fixed; inset: 0;
-    background: rgba(15,15,14,0.18);
-    z-index: 53;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .25s;
-  }
-  .mobile-scrim.open { opacity: 1; pointer-events: auto; }
+/* ─── SCROLL REVEAL ───────────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 550ms var(--ease-out), transform 550ms var(--ease-out); }
+.reveal.in { opacity: 1; transform: none; }
 
-  /* ---------- Side nav indicator (desktop only) ---------- */
-  .side-nav {
-    position: fixed;
-    top: 50%;
-    right: 24px;
-    transform: translateY(-50%);
-    z-index: 40;
-    display: none;
-    flex-direction: column;
-    gap: 14px;
-    text-align: right;
-  }
-  .side-nav a {
-    display: inline-flex; align-items: center; justify-content: flex-end; gap: 12px;
-    font-size: 10px; font-weight: 500;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--muted);
-    opacity: 0.55;
-    transition: opacity .25s, color .25s;
-    cursor: pointer;
-  }
-  .side-nav a::after {
-    content: "";
-    display: inline-block;
-    width: 16px; height: 1px;
-    background: currentColor;
-    transition: width .25s, background .25s;
-  }
-  .side-nav a:hover { opacity: 1; color: var(--ink); }
-  .side-nav a.active {
-    color: var(--accent);
-    opacity: 1;
-  }
-  .side-nav a.active::after {
-    width: 28px;
-    background: var(--accent);
-  }
-  @media (min-width: 1024px) {
-    .side-nav { display: flex; }
-  }
-  .skip-link {
-    position: absolute;
-    top: -100%;
-    left: 0;
-    padding: 8px 16px;
-    background: var(--accent);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 500;
-    z-index: 9999;
-    transition: top .2s;
-  }
-  .skip-link:focus { top: 0; }
-  .btn {
-    font-family: inherit;
-    font-size: 11px; font-weight: 500;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    padding: 12px 20px;
-    border: 1px solid var(--ink);
-    background: transparent; color: var(--ink);
-    cursor: pointer;
-    transition: background .18s, color .18s;
-  }
-  .btn:hover { background: var(--ink); color: #fff; }
-  .btn-solid { background: var(--ink); color: #fff; }
-  .btn-solid:hover { background: transparent; color: var(--ink); }
-  .btn-light {
-    border-color: #fff; color: #fff;
-  }
-  .btn-light:hover { background: #fff; color: var(--ink); }
+/* ─── HERO ────────────────────────────────────────────── */
+.hero {
+  position: relative; background: var(--paper);
+  border-bottom: 1px solid var(--ink); overflow: hidden;
+  min-height: 100vh; display: flex; align-items: center;
+}
+.hero-art { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero-art svg { width: 100%; height: 100%; display: block; }
+.hero-body { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: 80px var(--px) 96px; width: 100%; }
+.hero-headline { font-weight: 700; font-size: clamp(40px, 8vw, 108px); line-height: 0.88; letter-spacing: -0.035em; margin-bottom: 28px; }
+.hero-sub { font-size: clamp(16px, 1.8vw, 20px); line-height: 1.5; color: var(--ink-soft); max-width: 56ch; margin-bottom: 40px; letter-spacing: -0.005em; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 52px; }
+/* ─── HERO META STRIP ─────────────────────────────── */
+.hero-meta {
+  display: flex; flex-wrap: wrap;
+  border-top: 1px solid rgba(15,15,14,.22);
+  padding-top: 0;
+}
+.hero-meta-cell {
+  padding: 20px 28px 18px;
+  border-right: 1px solid rgba(15,15,14,.12);
+  flex-shrink: 0;
+}
+.hero-meta-cell:first-child { padding-left: 0; }
+.hero-meta-cell:last-child { border-right: none; }
+.hero-meta-label {
+  display: block;
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  font-weight: 500; color: var(--muted);
+  margin-bottom: 6px;
+}
+.hero-meta-value {
+  display: block;
+  font-size: clamp(17px, 1.6vw, 21px); font-weight: 700;
+  letter-spacing: -0.025em; line-height: 1;
+  color: var(--ink);
+}
+@media (max-width: 768px) {
+  .hero-meta-cell { padding: 16px 20px 14px; }
+  .hero-meta-cell:first-child { padding-left: 0; }
+  .hero-meta-value { font-size: 16px; }
+}
+/* veil behind copy so SVG art stays visible but text is readable */
+.hero-body::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 18% 50%, rgba(244,241,235,0.92) 0%, rgba(244,241,235,0.7) 40%, rgba(244,241,235,0) 75%);
+  pointer-events: none; z-index: -1;
+}
+.hero-descriptor {
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-descriptor::before {
+  content: ""; display: block; width: 28px; height: 1px; background: var(--accent); flex-shrink: 0;
+}
 
-  /* ---------- Layout shell ---------- */
-  .section {
-    position: relative;
-    padding: 96px 56px;
-    border-top: 1px solid var(--rule);
-  }
-  .section:first-of-type { border-top: 0; }
-  .section-inner { max-width: 1240px; margin: 0 auto; position: relative; }
-  .vlabel {
-    position: absolute; top: 96px; right: -8px;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-size: 10px; letter-spacing: 0.28em;
-    text-transform: uppercase; color: var(--muted);
-    font-weight: 500;
-  }
-  .eyebrow {
-    font-size: 11px; font-weight: 500;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--accent);
-  }
-  .secnum {
-    font-size: 88px; font-weight: 900;
-    letter-spacing: -0.04em; line-height: 1;
-    color: var(--ghost);
-    margin: 0 0 12px;
-    user-select: none;
-  }
-  .h2 {
-    font-size: 40px; font-weight: 700;
-    letter-spacing: -0.025em; line-height: 1.05;
-    margin: 22px 0 24px;
-    max-width: 760px;
-  }
-  .lede {
-    max-width: 640px;
-    font-size: 16px; font-weight: 300; line-height: 1.65;
-    color: var(--body);
-  }
+/* ─── HOW IT WORKS ────────────────────────────────────── */
+.hiw-intro { font-weight: 700; font-size: clamp(18px, 2vw, 24px); letter-spacing: -0.015em; margin-bottom: 64px; color: var(--ink-soft); }
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.step-card { padding: 40px 32px; border: 1px solid var(--ink); border-bottom: none; display: flex; flex-direction: column; gap: 24px; }
+.step-card:last-child { border-bottom: 1px solid var(--ink); }
+@media (min-width: 1024px) {
+  .step-card { border-bottom: 1px solid var(--ink); border-right: none; }
+  .step-card:last-child { border-right: 1px solid var(--ink); }
+}
+.step-title-wrap { position: relative; }
+.step-num {
+  position: absolute; top: 50%; left: -8px;
+  transform: translateY(-50%);
+  font-weight: 900; font-size: clamp(80px, 9vw, 100px); line-height: 1;
+  letter-spacing: -0.04em; color: var(--ghost);
+  user-select: none; pointer-events: none; z-index: 0;
+}
+.step-title { position: relative; z-index: 1; font-weight: 700; font-size: clamp(18px, 2.2vw, 24px); line-height: 1.1; letter-spacing: -0.02em; }
+.step-bullets { display: flex; flex-direction: column; gap: 10px; }
+.step-bullets li { position: relative; padding-left: 18px; font-size: 14px; line-height: 1.65; color: var(--ink-soft); }
+.step-bullets li::before { content: ""; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+/* placeholder for image — labelled for later replacement */
+.step-img-placeholder {
+  border: 1px dashed var(--rule); background: var(--ghost);
+  height: 160px; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  margin-top: auto;
+}
 
-  /* ---------- Hero ---------- */
-  .hero {
-    position: relative;
-    min-height: calc(100vh - 76px);
-    padding: 56px 56px 120px;
-    overflow: hidden;
-    border-top: 0;
-  }
-  .hero-grid {
-    position: relative;
-    z-index: 2;
-    max-width: 1240px; margin: 0 auto;
-    padding-top: 12px;
-  }
-  .hero-copy { position: relative; z-index: 2; max-width: 640px; }
-  .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 10px;
-    margin-bottom: 36px;
-  }
-  .hero-eyebrow::before {
-    content: ""; width: 18px; height: 1px; background: var(--accent);
-  }
-  .hero-h1 {
-    font-size: clamp(48px, 6.4vw, 86px);
-    font-weight: 900;
-    letter-spacing: -0.035em;
-    line-height: 0.95;
-    margin: 0 0 32px;
-  }
-  .hero-h1 em {
-    font-style: italic; color: var(--accent);
-    font-weight: 900;
-  }
-  .hero-sub {
-    max-width: 480px;
-    font-size: 16px; font-weight: 300; line-height: 1.65;
-    color: var(--body);
-    margin: 0 0 40px;
-  }
-  .hero-ctas { display: flex; align-items: center; gap: 28px; }
-  .link-accent {
-    color: var(--accent);
-    font-size: 13px; font-weight: 400;
-    border-bottom: 1px solid var(--accent);
-    padding-bottom: 2px;
-    transition: opacity .2s;
-  }
-  .link-accent:hover { opacity: 0.7; }
+/* ─── THE MATHS ───────────────────────────────────────── */
+.maths-head { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px; }
+@media (min-width: 1024px) { .maths-head { grid-template-columns: 1fr 1fr; align-items: end; gap: 64px; } }
+.maths-subhead { font-weight: 700; font-size: clamp(16px, 1.6vw, 20px); letter-spacing: -0.015em; color: var(--ink-soft); margin-bottom: 44px; max-width: 52ch; }
+.maths-table-wrap { overflow-x: auto; margin-bottom: 48px; -webkit-overflow-scrolling: touch; }
+.maths-table { width: 100%; border-collapse: collapse; border: 1px solid var(--rule); min-width: 560px; }
+.maths-table th { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); padding: 18px 24px; text-align: left; border-bottom: 1px solid var(--rule); vertical-align: bottom; }
+.maths-table th:nth-child(n+2) { text-align: center; }
+.maths-table td { padding: 18px 24px; font-size: 15px; font-weight: 300; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+.maths-table td:nth-child(n+2) { text-align: center; }
+.maths-table th small { display: block; font-size: 10px; letter-spacing: 0.08em; text-transform: none; color: var(--muted); margin-top: 4px; font-weight: 400; }
+.maths-table tr:last-child td { font-weight: 700; background: var(--paper-2); border-bottom: none; }
+.maths-table .big { font-size: 28px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; }
+.maths-accent { color: var(--accent); }
+.maths-pull { max-width: 680px; font-weight: 700; font-size: clamp(20px, 2.5vw, 30px); line-height: 1.15; letter-spacing: -0.02em; padding: 36px 0 0; border-top: 2px solid var(--ink); }
 
-  .hero-art {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    z-index: 1;
-    pointer-events: none;
-  }
-  .hero-art svg { width: 100%; height: 100%; display: block; }
-  /* Soft veil behind the copy so lines stay visible but text reads */
-  .hero-copy::before {
-    content: "";
-    position: absolute;
-    left: -24px; right: -40px; top: -24px; bottom: -24px;
-    background: radial-gradient(ellipse at 30% 45%, var(--bg) 0%, rgba(249,248,246,0.9) 38%, rgba(249,248,246,0) 78%);
-    z-index: -1;
-    pointer-events: none;
-  }
+/* ─── WILL / WON'T DO ─────────────────────────────────── */
+.split { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--rule); }
+@media (max-width: 768px) { .split { grid-template-columns: 1fr; } }
+.split-col { padding: 44px 36px; }
+.split-col.dark { background: var(--ink); color: #fff; }
+.split-col h3 { font-size: clamp(18px, 2.2vw, 26px); font-weight: 700; letter-spacing: -0.02em; margin: 12px 0 20px; }
+.split-col p { font-size: 14px; font-weight: 300; line-height: 1.65; color: var(--ink-soft); margin-bottom: 20px; }
+.split-col.dark p { color: rgba(255,255,255,0.6); }
+.split-col ul { display: flex; flex-direction: column; gap: 10px; }
+.split-col li { font-size: 14px; line-height: 1.6; padding-left: 20px; position: relative; }
+.split-col li::before { position: absolute; left: 0; font-weight: 700; }
+.split-col:not(.dark) li::before { content: "+"; color: var(--accent); }
+.split-col.dark li { color: rgba(255,255,255,0.82); }
+.split-col.dark li::before { content: "–"; color: rgba(255,255,255,0.4); }
+.split-tag { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; color: var(--accent); }
+.split-col.dark .split-tag { color: rgba(255,255,255,0.45); }
 
-  .hero-meta {
-    position: absolute; left: 56px; right: 56px; bottom: 32px;
-    display: flex; justify-content: space-between;
-    color: var(--muted); font-size: 11px; letter-spacing: 0.18em;
-    text-transform: uppercase; font-weight: 500;
-    max-width: 1240px; margin: 0 auto;
-  }
+/* ─── DEMO CALLS ──────────────────────────────────────── */
+.demo-cards { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+.demo-card { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 36px 32px; display: flex; flex-direction: column; gap: 16px; cursor: pointer; transition: background 180ms; }
+.demo-card:hover { background: var(--paper-2); }
+.demo-play { font-size: 32px; color: var(--accent); line-height: 1; }
+.demo-card p { font-size: 15px; font-weight: 300; line-height: 1.6; color: var(--ink); flex: 1; }
+.demo-label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; color: var(--muted); }
+.demo-footer { margin-top: 40px; font-size: 15px; color: var(--ink-soft); }
+.demo-footer a { color: var(--accent); font-weight: 500; border-bottom: 1px solid var(--accent); padding-bottom: 1px; }
 
-  /* ---------- Section 02 ROI ---------- */
-  .roi-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; margin-bottom: 64px; }
-  .roi-head .secnum { margin-bottom: 0; }
-  .roi-head .body-col { max-width: 620px; }
-  .stat-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    border: 1px solid var(--rule);
-    border-right: 0; border-bottom: 0;
-  }
-  .stat-cell {
-    border-right: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    padding: 44px 36px 36px;
-    min-height: 320px;
-    display: flex; flex-direction: column; justify-content: space-between;
-    background: var(--bg);
-  }
-  .stat-cell.dark { background: var(--ink); color: #fff; border-color: var(--ink); }
-  .stat-cell .label {
-    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-    font-weight: 500; color: var(--muted);
-  }
-  .stat-cell.dark .label { color: rgba(255,255,255,0.5); }
-  .stat-num {
-    font-size: 88px; font-weight: 900; letter-spacing: -0.04em;
-    line-height: 1; margin: 28px 0 0;
-  }
-  .stat-num .pop { color: var(--accent); }
-  .stat-cell.dark .stat-num { color: #fff; }
-  .stat-cell.dark .stat-num .pop { color: var(--accent); }
-  .stat-body {
-    font-size: 14px; font-weight: 300; line-height: 1.55;
-    color: var(--body);
-    margin: 28px 0 0;
-    max-width: 280px;
-  }
-  .stat-cell.dark .stat-body { color: rgba(255,255,255,0.7); }
-  .stat-foot {
-    margin-top: 24px;
-    font-size: 11px; color: var(--muted);
-    font-weight: 300;
-  }
-  .stat-cell.dark .stat-foot { color: rgba(255,255,255,0.55); }
+/* ─── PRICING ─────────────────────────────────────────── */
+/* Dark section wrapper */
+#pricing {
+  background: var(--ink);
+  border-top: none;
+  overflow: hidden;
+}
+#pricing h2 { color: #fff; }
+/* Background SVG art */
+.pricing-art {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+}
+.pricing-art svg { width: 100%; height: 100%; display: block; }
+#pricing .section-inner { position: relative; z-index: 1; }
+.pricing-layout {
+  display: grid; grid-template-columns: 1fr;
+  gap: 48px; align-items: start;
+  max-width: 960px; margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .pricing-layout { grid-template-columns: 1fr 1fr; }
+}
+/* Card — light/bone on dark bg */
+.pricing-card { border: 1px solid rgba(249,248,246,.15); background: var(--bone); padding: 40px; }
+.price-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 32px; }
+.price-amt { font-size: 72px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: var(--ink); }
+.price-per { font-size: 13px; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; }
+.pricing-card ul { border-top: 1px solid var(--rule); margin-bottom: 28px; }
+.pricing-card li { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); font-size: 14px; font-weight: 300; color: var(--ink); }
+.pricing-card li span:last-child { color: var(--muted); font-size: 12px; text-align: right; }
+.pricing-card .btn { display: block; width: 100%; text-align: center; padding: 16px; font-size: 14px; }
+.pricing-setup { font-size: 12px; color: rgba(249,248,246,0.55); line-height: 1.7; margin-top: 16px; }
+.pricing-setup strong { color: rgba(249,248,246,0.85); }
+/* FAQ column — light text on dark bg */
+.pricing-faq-col { display: flex; flex-direction: column; gap: 0; }
+.pricing-faq-col h3 { font-size: 14px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(249,248,246,0.45); margin-bottom: 20px; }
+.pricing-faq { border: 1px solid rgba(249,248,246,.15); }
+.pricing-faq .faq-item { border-bottom: 1px solid rgba(249,248,246,.1); }
+.pricing-faq .faq-item:last-child { border-bottom: none; }
+.pricing-faq .faq-q { padding: 18px 20px; font-size: 13px; color: rgba(249,248,246,0.88); }
+.pricing-faq .faq-q:hover { background: rgba(249,248,246,.06); }
+.pricing-faq .faq-chevron { stroke: rgba(249,248,246,0.6); }
+.pricing-faq .faq-ans-inner { padding: 0 20px 18px; font-size: 13px; color: rgba(249,248,246,0.6); }
 
-  /* ---------- Section 03 How it works ---------- */
-  .hiw-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; margin-bottom: 80px; }
-  .hiw-head .body-col { max-width: 640px; }
-  .steps {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 56px;
-    border-top: 1px solid var(--rule);
-    padding-top: 48px;
-  }
-  .step .step-label {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--accent);
-    margin-bottom: 36px; display: inline-block;
-  }
-  .step h3 {
-    font-size: 22px; font-weight: 700; letter-spacing: -0.015em;
-    line-height: 1.2; margin: 0 0 18px;
-    max-width: 240px;
-  }
-  .step p {
-    font-size: 14px; font-weight: 300; line-height: 1.65;
-    color: var(--body); margin: 0;
-    max-width: 320px;
-  }
+/* ─── SETUP TIMELINE ─────────────────────────────────── */
+.setup-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--ink);
+}
+.setup-card {
+  padding: 36px 32px 40px;
+  border-right: 1px solid var(--ink);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.setup-card:last-child { border-right: none; }
+.setup-hour {
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  font-weight: 500; color: var(--accent);
+}
+.setup-title {
+  font-weight: 700; font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.1; letter-spacing: -0.02em;
+}
+.setup-body {
+  font-size: 14px; font-weight: 300; line-height: 1.7;
+  color: var(--ink-soft);
+}
+.setup-sub {
+  font-weight: 700; font-size: clamp(18px, 2vw, 22px);
+  letter-spacing: -0.015em; margin-bottom: 48px;
+  color: var(--ink-soft);
+}
+@media (max-width: 960px) {
+  .setup-grid { grid-template-columns: repeat(2, 1fr); }
+  .setup-card:nth-child(2) { border-right: none; }
+  .setup-card:nth-child(1),
+  .setup-card:nth-child(2) { border-bottom: 1px solid var(--ink); }
+}
+@media (max-width: 768px) {
+  .setup-grid { grid-template-columns: 1fr; }
+  .setup-card { border-right: none; border-bottom: 1px solid var(--ink); }
+  .setup-card:last-child { border-bottom: none; }
+}
 
-  /* ---------- Pricing ---------- */
-  .price-head {
-    display: grid; grid-template-columns: 220px 1fr;
-    gap: 56px; align-items: start;
-    margin-bottom: 64px;
-    text-align: left;
-  }
-  .price-head .secnum { margin: 0 0 16px; }
-  .price-head .body-col { max-width: 640px; }
-  .price-head .h2 { margin: 12px 0 0; max-width: 640px; }
-  .price-head .eyebrow { display: block; margin-bottom: 0; }
-  .price-card {
-    max-width: 540px; margin: 0 auto;
-    border: 1px solid var(--ink);
-    background: var(--bg);
-    padding: 44px 44px 36px;
-  }
-  .price-row { display: flex; align-items: baseline; justify-content: space-between; }
-  .price-amt {
-    font-size: 64px; font-weight: 900; letter-spacing: -0.035em;
-    line-height: 1;
-  }
-  .price-per {
-    font-size: 13px; color: var(--muted);
-    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
-  }
-  .price-card ul {
-    list-style: none; padding: 0; margin: 32px 0 28px;
-    border-top: 1px solid var(--rule);
-  }
-  .price-card li {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--rule);
-    font-size: 14px; font-weight: 300; color: var(--ink);
-  }
-  .price-card li span:last-child { color: var(--muted); font-size: 12px; }
-  .price-card .btn { display: block; width: 100%; text-align: center; padding: 16px; }
-  .price-foot {
-    text-align: center; font-size: 12px; color: var(--muted);
-    margin-top: 22px; font-weight: 300;
-  }
+/* ─── TICKER STRIP ────────────────────────────────────── */
+/* Outer wrapper: full-width clip so content bleeds right */
+.ticker-outer {
+  overflow: hidden;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+/* On desktop ≥1280px, offset from left margin border */
+@media (min-width: 1280px) {
+  .ticker-outer { margin-left: var(--frame-left); }
+}
+.ticker {
+  overflow: hidden;
+  background: var(--paper);
+  height: 150px;
+  display: flex; align-items: center;
+  cursor: default;
+}
+.ticker:hover .ticker-track { animation-play-state: paused; }
+.ticker-track {
+  display: flex; align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  animation: ticker-scroll 40s linear infinite;
+  will-change: transform;
+}
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-card {
+  display: inline-flex; align-items: center; gap: 0;
+  padding: 0 48px;
+  border-right: 1px solid var(--rule);
+  height: 150px;
+  flex-shrink: 0;
+}
+.ticker-card-text {
+  font-size: 14px; font-weight: 300; font-style: italic;
+  color: var(--ink); line-height: 1.5;
+  max-width: 400px; white-space: normal;
+}
+.ticker-card-attr {
+  display: inline; font-style: normal;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+  margin-left: 12px; white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; overflow-x: auto; }
+}
 
-  /* ---------- Testimonials ---------- */
-  .quotes {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    border-top: 1px solid var(--rule);
-    border-left: 1px solid var(--rule);
-  }
-  .quote {
-    border-right: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    padding: 40px 36px;
-    background: var(--bg);
-    display: flex; flex-direction: column;
-  }
-  .quote-mark {
-    font-family: 'Inter'; font-weight: 900;
-    color: var(--accent); font-size: 40px;
-    line-height: 0.6; margin-bottom: 18px;
-  }
-  .quote p {
-    font-size: 18px; font-weight: 300; font-style: italic;
-    line-height: 1.5; color: var(--ink);
-    margin: 0 0 32px; flex: 1;
-    letter-spacing: -0.01em;
-  }
-  .quote .who {
-    font-size: 13px; font-weight: 500; color: var(--ink);
-  }
-  .quote .who small {
-    display: block; font-size: 11px; font-weight: 400; color: var(--muted);
-    letter-spacing: 0.06em; margin-top: 4px;
-  }
+/* ─── FAQ ─────────────────────────────────────────────── */
+.faq-layout { display: grid; grid-template-columns: 1fr; gap: 48px; }
+@media (min-width: 1024px) { .faq-layout { grid-template-columns: 260px 1fr; gap: 80px; align-items: start; } }
+.faq-sidebar { position: sticky; top: calc(var(--nav-h) + 16px); }
+.faq-sidebar-title { font-weight: 700; font-size: clamp(22px, 3vw, 36px); line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 10px; }
+.faq-sidebar-sub { font-size: 14px; line-height: 1.65; color: var(--ink-soft); }
+.faq-list { border: 1px solid var(--ink); }
+.faq-item { border-bottom: 1px solid var(--ink); }
+.faq-item:last-child { border-bottom: none; }
+.faq-q {
+  width: 100%; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+  padding: 22px 28px; background: none; border: none; text-align: left;
+  font-family: inherit; font-weight: 700; font-size: 15px; line-height: 1.4; letter-spacing: -0.005em; color: var(--ink); cursor: pointer; min-height: 44px;
+  transition: background-color 160ms var(--ease-out);
+}
+.faq-q:hover { background: var(--paper-2); }
+.faq-q:active { background: var(--paper-2); }
+.faq-chevron { width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; transition: transform 240ms var(--ease-out); }
+.faq-item.open .faq-chevron { transform: rotate(180deg); }
+.faq-ans { overflow: hidden; max-height: 0; transition: max-height 300ms var(--ease-out); }
+.faq-item.open .faq-ans { max-height: 480px; }
+.faq-ans-inner { padding: 0 28px 26px; font-size: 15px; line-height: 1.7; color: var(--ink-soft); max-width: 65ch; }
 
-  /* ---------- FAQ ---------- */
-  .faq-head { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; margin-bottom: 56px; }
-  .faq { max-width: 880px; margin: 0 auto; border-top: 1px solid var(--rule); }
-  .faq details {
-    border-bottom: 1px solid var(--rule);
-    padding: 22px 0;
-  }
-  .faq summary {
-    list-style: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: space-between;
-    font-size: 17px; font-weight: 700; letter-spacing: -0.01em;
-    color: var(--ink);
-    padding: 6px 0;
-  }
-  .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after {
-    content: "+"; font-weight: 300; font-size: 22px; color: var(--accent);
-    transition: transform .25s ease;
-  }
-  .faq details[open] summary::after { transform: rotate(45deg); }
-  .faq .ans {
-    font-size: 15px; font-weight: 300; line-height: 1.65;
-    color: var(--body); max-width: 700px;
-    margin: 14px 0 8px;
-  }
+/* ─── FOOTER ──────────────────────────────────────────── */
+.final {
+  background: var(--ink); color: #fff;
+  padding: 72px var(--px) 36px;
+  position: relative; overflow: hidden; border-top: none;
+}
+.final-art { position: absolute; right: 0; bottom: 0; width: 55%; max-width: 680px; opacity: 0.3; pointer-events: none; }
+.final-art svg { width: 100%; display: block; }
+.final-inner { position: relative; max-width: var(--max); margin: 0 auto; }
+.final-hl { font-size: clamp(28px, 4.5vw, 56px); font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; margin: 0 0 28px; max-width: 720px; }
+.final-hl em { font-style: italic; color: var(--accent); }
+.final-ctas { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
+.founder-quote { max-width: 600px; margin-bottom: 0; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.1); font-size: 14px; font-weight: 300; font-style: italic; line-height: 1.65; color: rgba(255,255,255,0.65); }
+.founder-quote cite { display: block; font-style: normal; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.38); margin-top: 10px; }
+.final-foot {
+  margin-top: 44px; padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap;
+  font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 300;
+}
+.final-foot-logo { font-weight: 700; font-size: 16px; letter-spacing: -0.055em; color: #fff; display: block; margin-bottom: 3px; }
+.final-foot .links { display: flex; gap: 16px; }
+.final-foot a:hover { color: #fff; }
+.final-trust { text-align: right; }
 
-  /* ---------- Final CTA / Footer ---------- */
-  .final {
-    background: var(--ink); color: #fff;
-    padding: 140px 56px 60px;
-    border-top: 0;
-    overflow: hidden;
-    position: relative;
-  }
-  .final-art {
-    position: absolute; right: 0; bottom: 0; width: 60%; max-width: 720px;
-    opacity: 0.35;
-    pointer-events: none;
-  }
-  .final-art svg { width: 100%; display: block; }
-  .final-inner { position: relative; max-width: 1240px; margin: 0 auto; }
-  .final h2 {
-    font-size: clamp(40px, 5.5vw, 72px); font-weight: 900;
-    letter-spacing: -0.035em; line-height: 0.98;
-    margin: 0 0 40px; max-width: 800px;
-  }
-  .final h2 em { font-style: italic; color: var(--accent); }
-  .final-foot {
-    margin-top: 140px;
-    padding-top: 32px;
-    border-top: 1px solid rgba(255,255,255,0.12);
-    display: flex; justify-content: space-between; align-items: flex-end;
-    gap: 24px; flex-wrap: wrap;
-    font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 300;
-  }
-  .final-foot .logo { color: #fff; }
-  .final-foot a:hover { color: #fff; }
-  .final-foot .col { display: flex; flex-direction: column; gap: 8px; }
-  .final-foot .links { display: flex; gap: 24px; }
+/* ─── RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 960px) {
+  .steps-grid, .demo-cards { grid-template-columns: 1fr; }
+  .quote, .demo-card { border-right: 1px solid var(--rule); }
+  .split { grid-template-columns: 1fr; }
+  .final { padding: 80px var(--px) 40px; }
+  .maths-table th, .maths-table td { padding: 14px 16px; }
+}
+@media (max-width: 768px) {
+  .section { padding: 64px var(--px); }
+  .pricing-card { padding: 28px 24px; }
+}
 
-  /* ---------- Scroll animations ---------- */
-  .reveal {
-    opacity: 0; transform: translateY(14px);
-    transition: opacity .55s ease-out, transform .55s ease-out;
-  }
-  .reveal.in { opacity: 1; transform: none; }
-
-  /* ---------- Responsive ---------- */
-  @media (max-width: 960px) {
-    .nav { padding: env(safe-area-inset-top) 20px 0; }
-    .section { padding: 64px 24px; }
-    .hero { padding: 32px 24px 80px; }
-    .hero-meta { display: none; }
-    .hero-h1 { font-size: clamp(40px, 9vw, 64px); }
-    .roi-head, .hiw-head, .faq-head, .price-head { grid-template-columns: 1fr; gap: 16px; }
-    .stat-grid { grid-template-columns: 1fr; }
-    .steps, .quotes { grid-template-columns: 1fr; gap: 32px; }
-    .quote { border-right: 0; }
-    .final { padding: 80px 24px 40px; }
-    .vlabel { display: none; }
-  }
-
-  @media (max-width: 768px) {
-    .nav-body { padding: 14px 20px; gap: 16px; justify-content: space-between; }
-    .nav-center { display: none; }
-    .nav-cta { display: none; }
-    .hamburger { display: inline-flex; }
-    .logo-mark { width: 32px; height: 32px; }
-  }
-  @media (min-width: 769px) {
-    .mobile-menu, .mobile-scrim { display: none; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-
-    .reveal {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
-
-    .mobile-menu {
-      transition: none;
-    }
-
-    .skip-link { transition: none; }
-  }
+/* ─── REDUCED MOTION ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .mobile-menu, .ham span { transition: none; }
+}
 </style>
 </head>
 <body>
 
-<a href="#top" class="skip-link">Skip to content</a>
+<!-- ─── PAGE FRAME ───────────────────────────────────── -->
 <div class="page-frame" aria-hidden="true"></div>
 
-<!-- ============ NAV ============ -->
-<nav class="nav" id="nav">
-  <a href="#top" class="logo" aria-label="Retinal — Home">
-    <span class="logo-mark"><img src="retinal-logo.png" alt="Retinal" width="44" height="44" /></span>
+<!-- ─── SKIP LINK ────────────────────────────────────── -->
+<a href="#hero" style="position:absolute;top:-100%;left:0;padding:8px 16px;background:var(--accent);color:#fff;font-size:13px;font-weight:500;z-index:9999;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-100%'">Skip to content</a>
+
+<!-- ─── NAV ──────────────────────────────────────────── -->
+<nav class="nav" id="nav" aria-label="Main navigation">
+  <a href="#hero" class="nav-logo-col" aria-label="Retinal — home">
+    <img src="retinal-logo.png" alt="Retinal" class="nav-logo-img" width="44" height="44" />
   </a>
-  <div class="nav-body">
-    <span class="wordmark">Retinal</span>
-    <div class="nav-center">
-      <div class="nav-links">
-        <a href="#how"><span class="num">01</span>How it works</a>
-        <a href="#pricing"><span class="num">02</span>Pricing</a>
-        <a href="#about"><span class="num">03</span>Reviews</a>
-        <a href="#faq"><span class="num">04</span>FAQ</a>
-      </div>
-    </div>
-    <button class="nav-cta" type="button">
-    <span>Get your number set up →</span>
-    <span class="arrow-btn" aria-hidden="true">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
-        <line x1="3" y1="8" x2="12" y2="8"/>
-        <polyline points="8.5,4 12.5,8 8.5,12"/>
-      </svg>
-    </span>
-  </button>
-  <button class="hamburger" type="button" id="hamburger" aria-label="Open menu" aria-expanded="false">
-    <span></span>
-  </button>
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="Retinal — go to top">
+      retinal<span class="dot">.</span>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#how-it-works"  class="nav-link" data-section="how-it-works">How it works</a></li>
+      <li><a href="#setup"         class="nav-link" data-section="setup">Setup</a></li>
+      <li><a href="#maths"         class="nav-link" data-section="maths">The Maths</a></li>
+      <li><a href="#pricing"       class="nav-link" data-section="pricing">Pricing</a></li>
+      <li><a href="#faq"           class="nav-link" data-section="faq">FAQ</a></li>
+    </ul>
+
+    <a href="#final-cta" class="btn btn-primary nav-cta" style="font-size:12px;padding:10px 18px;min-height:40px;">Get Started →</a>
+
+    <button class="ham" id="ham" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
-<!-- mobile menu -->
+<!-- mobile drawer -->
 <div class="mobile-scrim" id="mScrim"></div>
 <div class="mobile-menu" id="mMenu" aria-hidden="true">
   <div class="mm-links">
-    <a href="#how" class="mm-link"><span class="num">01</span>How it works</a>
-    <a href="#pricing" class="mm-link"><span class="num">02</span>Pricing</a>
-    <a href="#about" class="mm-link"><span class="num">03</span>Reviews</a>
-    <a href="#faq" class="mm-link"><span class="num">04</span>FAQ</a>
+    <a href="#how-it-works" class="mm-link">How it works</a>
+    <a href="#setup"        class="mm-link">Setup</a>
+    <a href="#maths"        class="mm-link">The Maths</a>
+    <a href="#pricing"      class="mm-link">Pricing</a>
+    <a href="#faq"          class="mm-link">FAQ</a>
   </div>
-  <button class="mm-cta" type="button">Get your number set up →</button>
+  <button class="mm-cta" id="mmCta">Get Started →</button>
 </div>
 
-<!-- side nav indicator (desktop) -->
+<!-- sticky side-nav (desktop ≥1280px) -->
 <nav class="side-nav" id="sideNav" aria-label="Section navigation">
-  <a href="#top" data-target="top">Intro</a>
-  <a href="#roi" data-target="roi">ROI</a>
-  <a href="#how" data-target="how">How it works</a>
-  <a href="#pricing" data-target="pricing">Pricing</a>
-  <a href="#about" data-target="about">Testimonials</a>
-  <a href="#faq" data-target="faq">FAQ</a>
-  <a href="#finalcta" data-target="finalcta">Get started</a>
+  <a href="#hero"          data-target="hero">Intro</a>
+  <a href="#how-it-works"  data-target="how-it-works">How it works</a>
+  <a href="#setup"         data-target="setup">Setup</a>
+  <a href="#maths"         data-target="maths">The Maths</a>
+  <a href="#will-wont"     data-target="will-wont">Will / Won't</a>
+  <a href="#demo"          data-target="demo">Demo</a>
+  <a href="#pricing"       data-target="pricing">Pricing</a>
+  <a href="#faq"           data-target="faq">FAQ</a>
+  <a href="#final-cta"     data-target="final-cta">Get started</a>
 </nav>
 
-<!-- ============ HERO ============ -->
-<header class="hero" id="top">
-  <!-- Full-bleed cobalt linework. Anchored bottom-right; reaches across page. -->
-  <div class="hero-art" id="heroArt" aria-hidden="true" style="filter: contrast(1.05)">
+<!-- ─── HERO ─────────────────────────────────────────── -->
+<header class="hero" id="hero">
+  <!-- V2 geometric linework — full-bleed SVG art in cobalt blue -->
+  <div class="hero-art" aria-hidden="true">
     <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
       <g fill="none" stroke="var(--accent)">
-
-        <!-- Faint baseline grid spanning the whole hero -->
-        <g class="lw lw-grid" stroke="var(--accent)" stroke-opacity="0.14" stroke-width="1">
+        <!-- Faint baseline grid -->
+        <g stroke-opacity="0.14" stroke-width="1">
           <path d="M0 100 L1600 100 M0 220 L1600 220 M0 340 L1600 340 M0 460 L1600 460 M0 580 L1600 580 M0 700 L1600 700 M0 820 L1600 820"/>
           <path d="M100 0 L100 900 M260 0 L260 900 M420 0 L420 900 M580 0 L580 900 M740 0 L740 900 M900 0 L900 900 M1060 0 L1060 900 M1220 0 L1220 900 M1380 0 L1380 900 M1540 0 L1540 900"/>
         </g>
-
-        <!-- Long perspective lines converging to a focal point on the right -->
-        <g class="lw lw-rays" stroke-width="1" stroke-opacity="0.55">
+        <!-- Perspective rays converging to focal point -->
+        <g stroke-width="1" stroke-opacity="0.55">
           <line x1="0"    y1="40"   x2="1320" y2="560"/>
           <line x1="0"    y1="140"  x2="1320" y2="560"/>
           <line x1="0"    y1="260"  x2="1320" y2="560"/>
@@ -763,18 +625,14 @@
           <line x1="1600" y1="200"  x2="1320" y2="560"/>
           <line x1="1600" y1="900"  x2="1320" y2="560"/>
         </g>
-
-        <!-- Bold dominant diagonals — slice across the page -->
-        <g class="lw lw-diag" stroke-width="2.5">
-          <line x1="-40"  y1="900"  x2="1640" y2="40"/>
+        <!-- Bold diagonals -->
+        <g stroke-width="2.5"><line x1="-40" y1="900" x2="1640" y2="40"/></g>
+        <g stroke-width="1.6" stroke-opacity="0.85">
+          <line x1="-40" y1="640" x2="1640" y2="120"/>
+          <line x1="-40" y1="320" x2="1640" y2="780"/>
         </g>
-        <g class="lw lw-diag" stroke-width="1.6" stroke-opacity="0.85">
-          <line x1="-40"  y1="640"  x2="1640" y2="120"/>
-          <line x1="-40"  y1="320"  x2="1640" y2="780"/>
-        </g>
-
-        <!-- Concentric signal arcs from the right focal point -->
-        <g class="lw lw-arcs" stroke-width="1" stroke-opacity="0.8">
+        <!-- Concentric signal arcs from focal point -->
+        <g stroke-width="1" stroke-opacity="0.8">
           <circle cx="1320" cy="560" r="160"/>
           <circle cx="1320" cy="560" r="260"/>
           <circle cx="1320" cy="560" r="380"/>
@@ -784,13 +642,11 @@
           <circle cx="1320" cy="560" r="1060"/>
           <circle cx="1320" cy="560" r="1280"/>
         </g>
-
-        <!-- 'Aperture' — a quietly precise focal circle on the right -->
-        <circle class="lw lw-ap" cx="1320" cy="560" r="200" stroke-width="1.4" stroke-opacity="0.95"/>
-        <circle class="lw lw-ap" cx="1320" cy="560" r="110" stroke-width="1" stroke-opacity="0.6"/>
-
-        <!-- Tick ladder on right edge -->
-        <g class="lw lw-tick" stroke-width="1" stroke-opacity="0.7">
+        <!-- Aperture -->
+        <circle cx="1320" cy="560" r="200" stroke-width="1.4" stroke-opacity="0.95"/>
+        <circle cx="1320" cy="560" r="110" stroke-width="1"   stroke-opacity="0.6"/>
+        <!-- Tick ladder -->
+        <g stroke-width="1" stroke-opacity="0.7">
           <line x1="1560" y1="80"  x2="1590" y2="80"/>
           <line x1="1560" y1="110" x2="1590" y2="110"/>
           <line x1="1560" y1="140" x2="1590" y2="140"/>
@@ -798,9 +654,8 @@
           <line x1="1560" y1="200" x2="1590" y2="200"/>
           <line x1="1560" y1="230" x2="1590" y2="230"/>
         </g>
-
         <!-- Dot constellation -->
-        <g class="lw lw-dots" fill="var(--accent)" stroke="none">
+        <g fill="var(--accent)" stroke="none">
           <circle cx="1320" cy="560" r="7"/>
           <circle cx="1180" cy="500" r="3.5"/>
           <circle cx="1040" cy="430" r="2.5"/>
@@ -813,22 +668,19 @@
           <circle cx="820"  cy="820" r="2"/>
           <circle cx="280"  cy="780" r="3"/>
         </g>
-
-        <!-- Crosshair on focal point -->
-        <g class="lw lw-cross" stroke-width="1" stroke-opacity="0.9">
+        <!-- Crosshair -->
+        <g stroke-width="1" stroke-opacity="0.9">
           <line x1="1290" y1="560" x2="1350" y2="560"/>
           <line x1="1320" y1="530" x2="1320" y2="590"/>
         </g>
-
-        <!-- Solid corner anchor -->
-        <g class="lw lw-anchor" fill="var(--accent)" stroke="none">
+        <!-- Corner anchor -->
+        <g fill="var(--accent)" stroke="none">
           <rect x="1400" y="820" width="160" height="6"/>
-          <rect x="1554" y="820" width="6" height="60"/>
+          <rect x="1554" y="820" width="6"   height="60"/>
         </g>
       </g>
-
-      <!-- Mono tick labels -->
-      <g class="lw lw-labels" fill="var(--accent)" font-family="ui-monospace, Menlo, monospace" font-size="11" letter-spacing="2" opacity="0.7">
+      <!-- Mono labels -->
+      <g fill="var(--accent)" font-family="ui-monospace,Menlo,monospace" font-size="11" letter-spacing="2" opacity="0.7">
         <text x="1400" y="876" font-weight="500">02:14 · LIVE</text>
         <text x="40"   y="876" font-weight="500">RTNL · 01 / UK</text>
         <text x="1330" y="554" font-weight="500">+44</text>
@@ -836,208 +688,560 @@
     </svg>
   </div>
 
-  <div class="hero-grid">
-    <div class="hero-copy reveal">
-      <div class="hero-eyebrow eyebrow">AI receptionist for UK plumbers, electricians and gas engineers</div>
-      <h1 class="hero-h1">You're on the tools.<br/><em>Mae's on the phone.</em><br/></h1>
-      <p class="hero-sub">Retinal picks up when you can't. Mae knows the difference between a first-fix and a second-fix, what a Gas Safe number is, and that a boiler breakdown isn't a service. Job details land in your WhatsApp. You call back when you're off the ladder.</p>
-      <div class="hero-ctas">
-        <button class="btn btn-solid">Get your number set up →</button>
-        <a href="#" class="link-accent">Hear Mae answer a real call →</a>
+  <div class="hero-body">
+    <h1 class="hero-headline reveal" id="hero-h1">
+      Get every job,<br>every time<span class="dot">.</span>
+    </h1>
+
+    <p class="hero-descriptor reveal" style="transition-delay:40ms">The AI Receptionist for UK Tradespeople</p>
+
+    <p class="hero-sub reveal" style="transition-delay:55ms">
+      Retinal answers the calls you miss while you're on the tools. Job details land in your WhatsApp before you're off the ladder. No dashboards. No onboarding. You just crack on.
+    </p>
+
+    <div class="hero-ctas reveal" style="transition-delay:115ms">
+      <a href="#final-cta" class="btn btn-primary">Get Started →</a>
+      <a href="#demo"      class="btn btn-secondary">Hear a real call →</a>
+    </div>
+
+    <div class="hero-meta reveal" style="transition-delay:175ms" aria-label="Key facts">
+      <div class="hero-meta-cell">
+        <span class="hero-meta-label">Setup</span>
+        <span class="hero-meta-value">48 hours</span>
+      </div>
+      <div class="hero-meta-cell">
+        <span class="hero-meta-label">Included minutes</span>
+        <span class="hero-meta-value">150 / mo</span>
+      </div>
+      <div class="hero-meta-cell">
+        <span class="hero-meta-label">Cancel anytime</span>
+        <span class="hero-meta-value">30 days' notice</span>
+      </div>
+      <div class="hero-meta-cell">
+        <span class="hero-meta-label">Trades covered</span>
+        <span class="hero-meta-value">Plumbers · Electricians · Gas Engineers</span>
       </div>
     </div>
-  </div>
-
-  <div class="hero-meta">
-    <span>Retinal — Est. 2026</span>
-    <span>UK Tradespeople · v1.0</span>
   </div>
 </header>
 
-<!-- ============ 02 ROI ============ -->
-<section class="section" id="roi">
+<!-- ─── HOW IT WORKS ──────────────────────────────────── -->
+<section class="section" id="how-it-works" aria-labelledby="hiw-h2">
   <div class="section-inner">
-    <div class="vlabel">ROI</div>
-    <div class="roi-head reveal">
-      <div></div>
-      <div class="body-col" style="padding-top: 8px;">
-        <div class="eyebrow">The cost of a missed call</div>
-        <h2 class="h2">The cost of a missed call</h2>
-        <p class="lede">Here's what that costs — in real UK job values, not invented averages.</p>
-      </div>
-    </div>
+    <p class="hiw-intro reveal">Three steps. No app to open. No portal to log into.</p>
 
-    <div class="stat-grid reveal">
-      <div class="stat-cell dark">
-        <div class="label">Lost per week</div>
-        <div>
-          <div class="stat-num">34<span class="pop">%</span></div>
-          <p class="stat-body">of UK tradespeople have lost work directly because they didn't answer their phone. 60% regularly struggle to take calls on site.</p>
+    <div class="steps-grid">
+
+      <!-- Step 1 -->
+      <div class="step-card reveal" style="transition-delay:60ms">
+        <div class="step-title-wrap">
+          <div class="step-num" aria-hidden="true">1</div>
+          <h3 class="step-title">You forward your number</h3>
         </div>
-        <div class="stat-foot">Source: Fix Radio survey of 220+ UK tradespeople.</div>
+        <ul class="step-bullets">
+          <li>Retinal intercepts unanswered and busy calls</li>
+          <li>Your existing number stays on your van and cards</li>
+          <li>Nothing changes for your customers</li>
+          <li>Takes about five minutes to set up — we do it for you</li>
+        </ul>
+        <!-- Placeholder: replace with screenshot of call forwarding setup -->
+        <div class="step-img-placeholder">Step 1 — call forwarding visual</div>
       </div>
-      <div class="stat-cell">
-        <div class="label">Missed calls</div>
-        <div>
-          <div class="stat-num">80<span class="pop">%</span></div>
-          <p class="stat-body">of callers who reach voicemail hang up without leaving a message. They don't ring back. They call the next number on Google.</p>
+
+      <!-- Step 2 -->
+      <div class="step-card reveal" style="transition-delay:120ms">
+        <div class="step-title-wrap">
+          <div class="step-num" aria-hidden="true">2</div>
+          <h3 class="step-title">Retinal takes the details</h3>
         </div>
-        <div class="stat-foot">Source: Hiya State of the Call report.</div>
+        <ul class="step-bullets">
+          <li>Speaks naturally, handles trade vocabulary</li>
+          <li>Knows first-fix, RCD trips, Gas Safe, powerflush</li>
+          <li>Gets the name, number, postcode, job type, urgency</li>
+          <li>Never quotes a price — always: "I'll get him to call you back"</li>
+        </ul>
+        <!-- Placeholder: replace with call transcript visual -->
+        <div class="step-img-placeholder">Step 2 — call transcript visual</div>
       </div>
-      <div class="stat-cell">
-        <div class="label">Return on Retinal</div>
-        <div>
-          <div class="stat-num">£275 · £300 · <span class="pop">£3,000</span></div>
-          <p class="stat-body">A boiler breakdown. A boiler repair. A new combi install. Three calls Mae could have answered while you were on a job. Retinal costs £149 a month.</p>
+
+      <!-- Step 3 -->
+      <div class="step-card reveal" style="transition-delay:180ms">
+        <div class="step-title-wrap">
+          <div class="step-num" aria-hidden="true">3</div>
+          <h3 class="step-title">The job lands in your WhatsApp</h3>
         </div>
-        <div class="stat-foot">Source: Checkatrade UK average job values, 2026.</div>
+        <ul class="step-bullets">
+          <li>Structured message: name, location, job, urgency</li>
+          <li>One tap to listen to the recording</li>
+          <li>Call them back when you're off the ladder</li>
+          <li>Done before you've even packed up your tools</li>
+        </ul>
+        <!-- Placeholder: replace with WhatsApp message screenshot -->
+        <div class="step-img-placeholder">Step 3 — WhatsApp message visual</div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- ============ 03 HOW IT WORKS ============ -->
-<section class="section" id="how">
+<!-- ─── THE MATHS ─────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-2)" id="maths" aria-labelledby="maths-h2">
   <div class="section-inner">
-    <div class="vlabel">How it works</div>
-    <div class="hiw-head reveal">
+    <div class="maths-head">
       <div>
-        <div class="secnum">01</div>
+        <h2 id="maths-h2" class="t-h1 reveal">The cost of a<br>missed call<span class="dot">.</span></h2>
       </div>
-      <div class="body-col">
-        <div class="eyebrow">Three steps, no faff</div>
-        <h2 class="h2">A call comes in while you're under a sink. Here's exactly what happens.</h2>
-      </div>
+      <p class="t-lede reveal" style="transition-delay:55ms;color:var(--ink-soft);align-self:end">
+        Real UK job values, realistic conversion rates. This isn't made up.
+      </p>
     </div>
 
-    <div class="steps reveal">
-      <div class="step">
-        <span class="step-label">Step 01</span>
-        <h3>Your customer rings</h3>
-        <p>They call your number. You're on a job, under a sink, up a roof, in the van. Mae picks up in under two rings — before it goes to voicemail.</p>
+    <p class="maths-subhead reveal" style="transition-delay:70ms">One job pays for itself. Sometimes even for two years.</p>
+
+    <div class="maths-table-wrap reveal" style="transition-delay:80ms">
+      <table class="maths-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Missed calls / week</th>
+            <th>Jobs recovered / month<small>at 40–50% conversion</small></th>
+            <th>Est. value / month<small>at £280 avg job</small></th>
+            <th>Retinal cost</th>
+            <th>Net gain</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Quieter week</td>
+            <td>8 calls</td>
+            <td>~3 jobs</td>
+            <td>~£840</td>
+            <td>£149</td>
+            <td class="maths-accent">£691</td>
+          </tr>
+          <tr>
+            <td>Typical week</td>
+            <td>10 calls</td>
+            <td>~4 jobs</td>
+            <td>~£1,120</td>
+            <td>£149</td>
+            <td class="maths-accent">£971</td>
+          </tr>
+          <tr>
+            <td>Busy week</td>
+            <td>12 calls</td>
+            <td>~5 jobs</td>
+            <td>~£1,400</td>
+            <td>£149</td>
+            <td class="maths-accent">£1,251</td>
+          </tr>
+          <tr>
+            <td><strong>Assumed</strong></td>
+            <td><strong>£280 avg job</strong></td>
+            <td><strong>40–50% conversion</strong></td>
+            <td>
+              <span class="big maths-accent" data-counter="£1120" data-suffix="">£1,120</span>
+            </td>
+            <td>
+              <span class="big" data-counter="£149" data-suffix="">£149</span>
+            </td>
+            <td>
+              <span class="big maths-accent" data-counter="£971" data-suffix="">£971</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- end maths-table-wrap -->
+
+  </div>
+</section>
+
+<!-- ─── WILL / WON'T DO ───────────────────────────────── -->
+<section class="section" id="will-wont" aria-labelledby="willwont-h2">
+  <div class="section-inner">
+    <h2 id="willwont-h2" class="t-h2 reveal" style="margin-bottom:40px;max-width:22ch">What Retinal will and won't do</h2>
+
+    <div class="split reveal" style="transition-delay:55ms">
+      <div class="split-col">
+        <span class="split-tag">What Retinal does</span>
+        <h3>The job of a good office manager.</h3>
+        <p>Takes calls professionally. Gets the right information. Sends you a lead. Stays out of your way. Knows your trade inside out.</p>
+        <ul>
+          <li>Answers unanswered and engaged calls</li>
+          <li>Speaks naturally — no menus, no robots</li>
+          <li>Takes name, number, postcode, job type, urgency</li>
+          <li>Handles trade vocabulary correctly</li>
+          <li>Sends a structured WhatsApp message every time</li>
+          <li>Records every call for your review</li>
+          <li>Works across plumbing, electrical, and gas</li>
+        </ul>
       </div>
-      <div class="step">
-        <span class="step-label">Step 02</span>
-        <h3>Mae takes the details</h3>
-        <p>She asks what the problem is, how urgent it is, where they are, and whether it's gas, electrical, or plumbing. She knows the language: "boiler losing pressure," "RCD keeps tripping," "first-fix on a new bathroom." She doesn't quote prices — she always says "I'll get him to call you back with a price." No scripts. No menu. No robots.</p>
-      </div>
-      <div class="step">
-        <span class="step-label">Step 03</span>
-        <h3>Job lands in your WhatsApp</h3>
-        <p>Name, number, postcode, job type, urgency, time they called. All in one WhatsApp message. One tap to call them back. Done before you're off the ladder.</p>
+      <div class="split-col dark">
+        <span class="split-tag">What Retinal won't do</span>
+        <h3>The things only you should decide.</h3>
+        <p>Retinal is a receptionist, not a salesperson or estimator. It knows its lane. You stay in charge of the decisions that matter.</p>
+        <ul>
+          <li>Quote a price for any job</li>
+          <li>Confirm availability or book a date</li>
+          <li>Make commitments on your behalf</li>
+          <li>Discuss call-out charges</li>
+          <li>Give technical advice or diagnose jobs</li>
+          <li>Pretend it's a human if asked directly</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ 04 PRICING ============ -->
-<section class="section" id="pricing">
+<!-- ─── DEMO CALLS ────────────────────────────────────── -->
+<section class="section" id="demo" aria-labelledby="demo-h2">
   <div class="section-inner">
-    <div class="vlabel">Pricing</div>
-    <div class="price-head reveal">
-      <div>
-        <div class="secnum">02</div>
+    <h2 id="demo-h2" class="t-h2 reveal" style="margin-bottom:12px;max-width:28ch">Don't take our word for it. Hear Retinal handle a real call.</h2>
+    <p class="reveal" style="transition-delay:40ms;color:var(--ink-soft);font-size:15px;font-weight:300;margin-bottom:40px">Three scenarios. Real calls, real results.</p>
+
+    <div class="demo-cards reveal" style="transition-delay:80ms">
+
+      <div class="demo-card">
+        <div class="demo-play" aria-hidden="true">▶</div>
+        <p>Customer calls about a boiler that's been losing pressure all week. Wants someone today if possible. Gas engineer in South London.</p>
+        <span class="demo-label">Emergency · Plumbing</span>
       </div>
-      <div class="body-col" style="padding-top: 8px;">
-        <div class="eyebrow">Pricing</div>
-        <h2 class="h2">£149 a month. No contracts. Cancel with 30 days' notice.</h2>
+
+      <div class="demo-card">
+        <div class="demo-play" aria-hidden="true">▶</div>
+        <p>Developer calls about a first-fix bathroom on a new build in zone 4. Wants to book a site survey. Multiple bathrooms, long-running project.</p>
+        <span class="demo-label">Survey booking · Plumbing</span>
       </div>
+
+      <div class="demo-card">
+        <div class="demo-play" aria-hidden="true">▶</div>
+        <p>Homeowner's RCD keeps tripping — third time this week. Wants a Part P registered electrician. Worried about safety, not price-shopping.</p>
+        <span class="demo-label">Safety · Electrical</span>
+      </div>
+
     </div>
 
-    <div class="price-card reveal">
-      <div class="price-row">
-        <div>
-          <div class="price-amt">£149</div>
+    <p class="demo-footer reveal" style="transition-delay:120ms">
+      Want to talk to it yourself? Call <a href="tel:+441234567890">0123 456 7890</a> — placeholder number, will be updated at launch.
+    </p>
+  </div>
+</section>
+
+<!-- ─── PRICING ───────────────────────────────────────── -->
+<section class="section" id="pricing" aria-labelledby="pricing-h2">
+  <!-- Radiating geometric art — bone/white strokes on dark -->
+  <div class="pricing-art" aria-hidden="true">
+    <svg viewBox="0 0 1200 600" preserveAspectRatio="xMaxYMax slice">
+      <g stroke="#F9F8F6" stroke-width="0.7" fill="none" opacity="0.18">
+        <!-- Radiating lines from bottom-right corner -->
+        <line x1="1200" y1="600" x2="0"    y2="0"/>
+        <line x1="1200" y1="600" x2="120"  y2="0"/>
+        <line x1="1200" y1="600" x2="260"  y2="0"/>
+        <line x1="1200" y1="600" x2="420"  y2="0"/>
+        <line x1="1200" y1="600" x2="600"  y2="0"/>
+        <line x1="1200" y1="600" x2="780"  y2="0"/>
+        <line x1="1200" y1="600" x2="960"  y2="0"/>
+        <line x1="1200" y1="600" x2="0"    y2="80"/>
+        <line x1="1200" y1="600" x2="0"    y2="200"/>
+        <line x1="1200" y1="600" x2="0"    y2="360"/>
+        <line x1="1200" y1="600" x2="0"    y2="500"/>
+        <line x1="1200" y1="600" x2="1200" y2="0"/>
+        <!-- Concentric arcs from corner -->
+        <circle cx="1200" cy="600" r="200"/>
+        <circle cx="1200" cy="600" r="340"/>
+        <circle cx="1200" cy="600" r="500"/>
+        <circle cx="1200" cy="600" r="680"/>
+        <circle cx="1200" cy="600" r="880"/>
+      </g>
+      <!-- Scattered node dots -->
+      <g fill="#F9F8F6" opacity="0.28">
+        <circle cx="980"  cy="520" r="3"/>
+        <circle cx="840"  cy="420" r="2.5"/>
+        <circle cx="700"  cy="310" r="4"/>
+        <circle cx="550"  cy="220" r="2"/>
+        <circle cx="400"  cy="150" r="3.5"/>
+        <circle cx="240"  cy="90"  r="2"/>
+        <circle cx="1100" cy="380" r="2.5"/>
+        <circle cx="1060" cy="200" r="3"/>
+        <circle cx="820"  cy="80"  r="2"/>
+      </g>
+    </svg>
+  </div>
+  <div class="section-inner">
+    <h2 id="pricing-h2" class="t-h1 reveal" style="margin-bottom:48px;max-width:22ch">£149 a month. No contracts. Cancel with 30 days' notice.</h2>
+
+    <div class="pricing-layout">
+
+      <!-- Left: FAQ -->
+      <div class="pricing-faq-col reveal" style="transition-delay:40ms">
+        <h3>Common questions</h3>
+        <div class="pricing-faq faq-list">
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq1">
+              <span>Is 150 minutes enough for me?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="faq-ans" id="pfaq1">
+              <div class="faq-ans-inner">Most solo tradespeople average 60–90 minutes of inbound calls per month. 150 minutes is generous headroom — the vast majority of customers never go near the limit. If you're running a busier operation, just ask us and we'll tell you honestly whether you need more.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq2">
+              <span>What if I go over 150 minutes?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="faq-ans" id="pfaq2">
+              <div class="faq-ans-inner">You're charged £0.80/min for any time beyond your included 150 minutes. Most solo tradespeople use well under their limit — but if you do go over, you'll see it on your next bill with a full call-by-call breakdown.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq3">
+              <span>Is there a contract?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="faq-ans" id="pfaq3">
+              <div class="faq-ans-inner">No. It's month-to-month after your first month. If you want to cancel, give us 30 days' notice — no exit fee, no awkward conversation. We'd rather earn your business every month than lock you in.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq4">
+              <span>Can I pause it?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="faq-ans" id="pfaq4">
+              <div class="faq-ans-inner">Yes. If you're going on holiday or have a quiet spell, just let us know and we'll update the agent so it tells callers exactly when you're back — "I can take your details but just to let you know, [Name] is back on [date] and will call you then." Your number stays live, no leads slip through, and you pick up exactly where you left off.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false" aria-controls="pfaq5">
+              <span>Does it work with my existing number?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="faq-ans" id="pfaq5">
+              <div class="faq-ans-inner">Yes. Retinal doesn't replace your number — it covers it. When a call goes unanswered or you're engaged, it forwards to Retinal automatically. Your number stays yours. Customers never know they've been redirected.</div>
+            </div>
+          </div>
         </div>
-        <div class="price-per">per month</div>
       </div>
-      <ul>
-        <li><span>150 minutes included</span><span>per month (around 100–150 calls)</span></li>
-        <li><span>Done-for-you setup</span><span>48 hours, one phone call</span></li>
-        <li><span>WhatsApp lead delivery</span><span>real-time, named-AI agent</span></li>
-        <li><span>Weekly QA review</span><span>sample of calls reviewed by a real person, every week</span></li>
-        <li><span>Overage calls</span><span>£0.80 / min</span></li>
-        <li><span>Cancel</span><span>30 days' notice, no exit fee</span></li>
-      </ul>
-      <button class="btn btn-solid">Get your number set up →</button>
+
+      <!-- Right: Pricing card -->
+      <div class="reveal" style="transition-delay:80ms">
+        <div class="pricing-card">
+          <div class="price-row">
+            <div class="price-amt">£149</div>
+            <div class="price-per">per month</div>
+          </div>
+          <ul>
+            <li><span>150 minutes included</span><span>around 100–150 calls per month</span></li>
+            <li><span>Done-for-you setup</span><span>48 hours, one phone call</span></li>
+            <li><span>WhatsApp lead delivery</span><span>real-time, every call</span></li>
+            <li><span>Weekly QA review</span><span>real person checks your calls, every week</span></li>
+            <li><span>Cancel</span><span>30 days' notice, no exit fee</span></li>
+          </ul>
+          <a href="#final-cta" class="btn btn-primary">Get Started →</a>
+        </div>
+        <p class="pricing-setup">
+          One-off setup fee: <strong>£99</strong>. Waived if you pay annually (<strong>£1,600/yr</strong> — saves £188).
+        </p>
+      </div>
+
     </div>
-    <p class="price-foot">One-off setup fee: £199. Waived if you pay annually (£1,600/yr — saves £188).</p>
   </div>
 </section>
 
-<!-- ============ 05 TESTIMONIALS ============ -->
-<section class="section" id="about">
+<!-- ─── SETUP TIMELINE ────────────────────────────────── -->
+<section class="section" id="setup" aria-labelledby="setup-h2">
   <div class="section-inner">
-    <div class="vlabel">Testimonials</div>
-    <div class="hiw-head reveal">
-      <div><div class="secnum">03</div></div>
-      <div class="body-col">
-        <h2 class="h2">Don't trust copy. Listen to Mae.</h2>
-      </div>
-    </div>
+    <h2 id="setup-h2" class="t-h1 reveal" style="margin-bottom:16px;max-width:18ch">Live in 48 hours<span class="dot">.</span></h2>
+    <p class="setup-sub reveal" style="transition-delay:40ms">One phone call. No dashboards. No forms to fill in.</p>
 
-    <div class="quotes reveal">
-      <div class="quote">
-        <div class="quote-mark" aria-hidden="true">"</div>
-        <p>Picked up a £900 boiler swap I would have completely missed. Paid for itself in one morning.</p>
-        <div class="who">Dave H.<small>Plumber · North London</small></div>
+    <div class="setup-grid reveal" style="transition-delay:80ms">
+
+      <div class="setup-card">
+        <span class="setup-hour">Hour 0</span>
+        <h3 class="setup-title">You sign up</h3>
+        <p class="setup-body">Fill in one short form — your trade, your area, your usual jobs. Takes about five minutes. That's the brief.</p>
       </div>
-      <div class="quote">
-        <div class="quote-mark" aria-hidden="true">"</div>
-        <p>It sounds like a person. My customers don't notice. I just get the WhatsApp and ring them back when I'm done.</p>
-        <div class="who">Marcus T.<small>Electrician · Manchester</small></div>
+
+      <div class="setup-card">
+        <span class="setup-hour">Hour 2</span>
+        <h3 class="setup-title">We call you</h3>
+        <p class="setup-body">A 20-minute call to go over the brief, hear how you want to sound, and ask anything we couldn't get from the form.</p>
       </div>
-      <div class="quote">
-        <div class="quote-mark" aria-hidden="true">"</div>
-        <p>Setup took a phone call. Two days later it was live. I haven't lost a job to voicemail since.</p>
-        <div class="who">Sam R.<small>Gas Engineer · Bristol</small></div>
+
+      <div class="setup-card">
+        <span class="setup-hour">Hour 36</span>
+        <h3 class="setup-title">Retinal is trained</h3>
+        <p class="setup-body">We build your agent, run it through a hundred test calls, and send you three sample recordings to approve.</p>
       </div>
+
+      <div class="setup-card">
+        <span class="setup-hour">Hour 48</span>
+        <h3 class="setup-title">You go live</h3>
+        <p class="setup-body">We flip the call-forward on. Retinal starts answering. You start getting WhatsApp leads. That's it.</p>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- ============ 06 FAQ ============ -->
-<section class="section" id="faq">
+<!-- ─── TICKER STRIP ──────────────────────────────────── -->
+<div class="ticker-outer">
+<div class="ticker" role="marquee" aria-label="Customer reviews">
+  <div class="ticker-track">
+    <!-- Set 1 -->
+    <div class="ticker-card">
+      <span class="ticker-card-text">"Picked up a £900 boiler swap I would have completely missed. It paid for itself in one morning."<span class="ticker-card-attr">— Dave H. · Plumber · North London</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"It sounds like a person. My customers don't notice. I just get the WhatsApp and ring them back when I'm done."<span class="ticker-card-attr">— Marcus T. · Electrician · Manchester</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"Setup took a phone call. Two days later it was live. I haven't lost a job to voicemail since."<span class="ticker-card-attr">— Sam R. · Gas Engineer · Bristol</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"Used to lose at least two jobs a week to voicemail. Now I get a WhatsApp with the full job details before I've even finished the one I'm on."<span class="ticker-card-attr">— Terry B. · Plumber · Birmingham</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"Had a customer ring back and say 'your receptionist was really helpful.' There is no receptionist. That tells you everything."<span class="ticker-card-attr">— Craig W. · Electrician · Leeds</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"First week it caught a boiler breakdown call at 7am while I was on the school run. £320 job. Paid for four months in one call."<span class="ticker-card-attr">— Paul M. · Gas Engineer · South London</span></span>
+    </div>
+    <!-- Set 2 — duplicate for seamless loop -->
+    <div class="ticker-card">
+      <span class="ticker-card-text">"Picked up a £900 boiler swap I would have completely missed. It paid for itself in one morning."<span class="ticker-card-attr">— Dave H. · Plumber · North London</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"It sounds like a person. My customers don't notice. I just get the WhatsApp and ring them back when I'm done."<span class="ticker-card-attr">— Marcus T. · Electrician · Manchester</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"Setup took a phone call. Two days later it was live. I haven't lost a job to voicemail since."<span class="ticker-card-attr">— Sam R. · Gas Engineer · Bristol</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"Used to lose at least two jobs a week to voicemail. Now I get a WhatsApp with the full job details before I've even finished the one I'm on."<span class="ticker-card-attr">— Terry B. · Plumber · Birmingham</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"Had a customer ring back and say 'your receptionist was really helpful.' There is no receptionist. That tells you everything."<span class="ticker-card-attr">— Craig W. · Electrician · Leeds</span></span>
+    </div>
+    <div class="ticker-card">
+      <span class="ticker-card-text">"First week it caught a boiler breakdown call at 7am while I was on the school run. £320 job. Paid for four months in one call."<span class="ticker-card-attr">— Paul M. · Gas Engineer · South London</span></span>
+    </div>
+  </div>
+</div>
+</div><!-- /.ticker-outer -->
+
+<!-- ─── FAQ ───────────────────────────────────────────── -->
+<section class="section" id="faq" aria-labelledby="faq-h2">
   <div class="section-inner">
-    <div class="vlabel">FAQ</div>
-    <div class="faq-head reveal">
-      <div><div class="secnum">04</div></div>
-      <div class="body-col">
-        <h2 class="h2">Your questions, straight answers.</h2>
-      </div>
-    </div>
+    <div class="faq-layout">
 
-    <div class="faq reveal">
-      <details>
-        <summary>Will my customers know it's AI?</summary>
-        <p class="ans">No — and we don't pretend otherwise either. Mae introduces herself by name, sounds natural, and gets the job done. Most callers won't think twice. If asked directly, she's honest.</p>
-      </details>
-      <details>
-        <summary>What if she gets something wrong?</summary>
-        <p class="ans">Every call is reviewed by a real person in your first two weeks, and a sample is reviewed every week after that. We catch slips and retrain the agent on your patterns. If a job comes through wrong, we make it right.</p>
-      </details>
-      <details>
-        <summary>How long does setup take?</summary>
-        <p class="ans">48 hours from the moment we have your number and a 20-minute intro call. Done-for-you. You don't touch a dashboard.</p>
-      </details>
-      <details>
-        <summary>Can I cancel anytime?</summary>
-        <p class="ans">Yes. 30 days' notice. No long contract. No exit fee.</p>
-      </details>
-      <details>
-        <summary>What trades do you work with?</summary>
-        <p class="ans">Plumbers, electricians, and gas engineers — that's it for now. Mae is trained on the language of those trades specifically: first-fix vs second-fix, RCD trips, Gas Safe checks, powerflushes, boiler breakdowns vs services.</p>
-      </details>
-      <details>
-        <summary>What happens to the call recordings?</summary>
-        <p class="ans">Stored encrypted in the UK for 90 days, then deleted. Used only for QA and agent improvement. Never sold. Never shared. ICO registered, GDPR compliant.</p>
-      </details>
+      <div class="faq-sidebar reveal">
+        <h2 id="faq-h2" class="faq-sidebar-title">Got questions<span class="dot">.</span></h2>
+        <p class="faq-sidebar-sub">Straight answers. No spin, no small print.</p>
+      </div>
+
+      <div class="faq-list reveal" style="transition-delay:60ms" role="list">
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa1">
+            <span>Will my customers know it's AI?</span>
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-ans" id="fa1">
+            <div class="faq-ans-inner">Most won't. The agent answers professionally, uses trade language correctly, and doesn't behave like a chatbot. If a customer asks directly, it says it's a virtual assistant. We don't lie — we don't need to.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa2">
+            <span>Will Retinal quote my customers a price?</span>
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-ans" id="fa2">
+            <div class="faq-ans-inner">No. Never. Retinal always says it'll get you to call them back with a price. Quoting is your job — Retinal just makes sure you know the job exists.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa3">
+            <span>Does it handle different UK accents?</span>
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-ans" id="fa3">
+            <div class="faq-ans-inner">Yes. The agent handles a wide range of UK regional accents. Your weekly QA review catches any misunderstandings and we retrain the agent on your specific caller patterns over time.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa4">
+            <span>What if it gets something wrong?</span>
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-ans" id="fa4">
+            <div class="faq-ans-inner">Every week, a real person reviews a sample of your calls, checks for slips, and retrains the agent. If something comes through wrong, we make it right. It's not set-and-forget — it gets better over time.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa5">
+            <span>How long does setup take?</span>
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-ans" id="fa5">
+            <div class="faq-ans-inner">One phone call with us. 48 hours until you're live. We handle the number, the routing, everything. You don't touch a setting.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa6">
+            <span>Can I cancel anytime?</span>
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-ans" id="fa6">
+            <div class="faq-ans-inner">Yes. 30 days' notice. No long contract. No exit fee. No small print designed to trap you. If it's not working, we won't make it painful to leave.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa7">
+            <span>What trades do you work with?</span>
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-ans" id="fa7">
+            <div class="faq-ans-inner">Plumbers, electricians, and gas engineers — specifically trained for these trades. The agent knows first-fix from second-fix, what a Gas Safe number is, what a powerflush involves. Call us if you're not sure whether your trade fits.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false" aria-controls="fa8">
+            <span>What happens to the call recordings?</span>
+            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-ans" id="fa8">
+            <div class="faq-ans-inner">Stored encrypted in the UK for 90 days, then permanently deleted. Used only for QA and agent improvement. Never sold. Never shared with third parties. ICO registered (ZB 891 204), GDPR and UK Data Protection Act 2018 compliant.</div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ FINAL CTA / FOOTER ============ -->
-<footer class="final" id="finalcta">
+<!-- ─── FOOTER / FINAL CTA ────────────────────────────── -->
+<footer class="final" id="final-cta" aria-label="Get started and site footer">
+
+  <!-- Background geometric art — concentric circles in accent blue -->
   <div class="final-art" aria-hidden="true">
     <svg viewBox="0 0 720 460" preserveAspectRatio="xMidYMax meet">
       <g fill="none" stroke="#3d6fd4" stroke-opacity="0.9">
@@ -1046,132 +1250,203 @@
           <circle cx="560" cy="420" r="200"/>
           <circle cx="560" cy="420" r="290"/>
           <circle cx="560" cy="420" r="380"/>
+          <circle cx="560" cy="420" r="490"/>
         </g>
         <g stroke-width="1.4">
           <line x1="20" y1="440" x2="700" y2="80"/>
           <line x1="20" y1="380" x2="700" y2="160"/>
+          <line x1="20" y1="300" x2="700" y2="240"/>
         </g>
         <g fill="#3d6fd4" stroke="none">
-          <circle cx="560" cy="420" r="5"/>
-          <circle cx="380" cy="320" r="3"/>
-          <circle cx="200" cy="220" r="2"/>
+          <circle cx="560" cy="420" r="6"/>
+          <circle cx="380" cy="320" r="3.5"/>
+          <circle cx="200" cy="220" r="2.5"/>
           <circle cx="640" cy="180" r="4"/>
+          <circle cx="100" cy="380" r="3"/>
         </g>
       </g>
     </svg>
   </div>
+
   <div class="final-inner">
-    <div class="eyebrow" style="color: var(--accent); margin-bottom: 28px;">One phone call to set up. Then you never miss another.</div>
-    <h2>Your next missed call is a job<br/>you <em>won't get back.</em></h2>
-    <button class="btn btn-light">Get your number set up →</button>
+    <h2 class="final-hl reveal">
+      One phone call to set up,<br>then you <em>never miss another.</em>
+    </h2>
+
+    <div class="final-ctas reveal" style="transition-delay:55ms">
+      <a href="#" class="btn btn-bone">Get Started</a>
+    </div>
+
+    <blockquote class="founder-quote reveal" style="transition-delay:110ms">
+      "I run Retinal. I'm one person. Retinal works for me as hard as it works for you. If something breaks at 8am, you call my mobile, and I'm on it within an hour. That's the deal."
+      <cite>— Hish, founder</cite>
+    </blockquote>
 
     <div class="final-foot">
-      <div class="col">
-        <span class="logo" style="color:#fff"><span class="logo-mark" style="border-color:#fff"></span>Retinal</span>
-        <span>© 2026 Retinal Ltd.</span>
+      <div>
+        <a href="#hero" class="final-foot-logo">retinal<span class="dot">.</span></a>
+        <span>© 2026 Retinal</span>
       </div>
-      <div class="col" style="align-items:flex-start">
-        <div class="links">
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Contact</a>
-        </div>
+      <div class="links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
       </div>
-      <div class="col" style="text-align:right; align-items:flex-end">
-        <span>ICO Registration ZB&#8239;891&#8239;204</span>
-        <span>GDPR &amp; UK DPA 2018 compliant</span>
+      <div class="final-trust">
+        <div>ICO Registration ZB&#8239;891&#8239;204</div>
+        <div>GDPR &amp; UK DPA 2018 compliant</div>
       </div>
     </div>
   </div>
 </footer>
 
 <script>
-  // Reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in');
-        io.unobserve(e.target);
+/* ── Nav: scroll state ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+/* ── Hamburger + mobile drawer ── */
+const ham    = document.getElementById('ham');
+const mMenu  = document.getElementById('mMenu');
+const mScrim = document.getElementById('mScrim');
+
+const focusable = () => [...mMenu.querySelectorAll('a, button')];
+
+const closeMenu = () => {
+  mMenu.classList.remove('open');
+  mScrim.classList.remove('open');
+  ham.classList.remove('open');
+  ham.setAttribute('aria-expanded', 'false');
+  ham.setAttribute('aria-label', 'Open menu');
+  mMenu.setAttribute('aria-hidden', 'true');
+  ham.focus();
+};
+const openMenu = () => {
+  mMenu.classList.add('open');
+  mScrim.classList.add('open');
+  ham.classList.add('open');
+  ham.setAttribute('aria-expanded', 'true');
+  ham.setAttribute('aria-label', 'Close menu');
+  mMenu.setAttribute('aria-hidden', 'false');
+  const els = focusable();
+  if (els.length) els[0].focus();
+};
+
+ham.addEventListener('click', () => mMenu.classList.contains('open') ? closeMenu() : openMenu());
+mScrim.addEventListener('click', closeMenu);
+mMenu.querySelectorAll('a, #mmCta').forEach(el => el.addEventListener('click', closeMenu));
+
+mMenu.addEventListener('keydown', (e) => {
+  if (!mMenu.classList.contains('open')) return;
+  const els   = focusable();
+  const first = els[0];
+  const last  = els[els.length - 1];
+  if (e.key === 'Tab') {
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+  if (e.key === 'Escape') closeMenu();
+});
+
+/* ── Nav active links: IntersectionObserver ── */
+const navLinks = document.querySelectorAll('.nav-link');
+const activeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(l => l.classList.toggle('active', l.dataset.section === id));
+    }
+  });
+}, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+document.querySelectorAll('section[id], header[id], footer[id]').forEach(s => activeObs.observe(s));
+
+/* ── Sticky side-nav ── */
+const sideNav   = document.getElementById('sideNav');
+const sideLinks = sideNav.querySelectorAll('a');
+const sectionIds = [...sideLinks].map(a => a.dataset.target);
+
+sideLinks.forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    const t = document.getElementById(a.dataset.target);
+    if (!t) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+  });
+});
+
+const setActive = () => {
+  const y = window.scrollY + window.innerHeight * 0.35;
+  let current = sectionIds[0];
+  for (const id of sectionIds) {
+    const el = document.getElementById(id);
+    if (el && el.offsetTop <= y) current = id;
+  }
+  sideLinks.forEach(a => a.classList.toggle('active', a.dataset.target === current));
+};
+document.addEventListener('scroll', setActive, { passive: true });
+window.addEventListener('resize', setActive);
+setActive();
+
+/* ── Scroll reveal ── */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ── Stat counters: easeOutCubic, rAF, 1200ms ── */
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+function countUp(el) {
+  const raw    = el.dataset.counter;
+  const target = parseInt(raw.replace(/[^0-9]/g, ''), 10);
+  const prefix = raw.match(/^[^0-9]*/)[0];
+  const suffix = el.dataset.suffix || '';
+  const dur    = 1200;
+  const t0     = performance.now();
+  function tick(now) {
+    const p = Math.min((now - t0) / dur, 1);
+    el.textContent = prefix + Math.round(easeOutCubic(p) * target) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+const cntObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { countUp(e.target); cntObs.unobserve(e.target); } });
+}, { threshold: 0.4 });
+document.querySelectorAll('[data-counter]').forEach(el => cntObs.observe(el));
+
+/* ── FAQ accordion: one open at a time ── */
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item   = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(o => {
+      if (o !== item) {
+        o.classList.remove('open');
+        o.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-  // Mobile menu
-  const hamburger = document.getElementById('hamburger');
-  const mMenu = document.getElementById('mMenu');
-  const mScrim = document.getElementById('mScrim');
-
-  const menuFocusable = () => [...mMenu.querySelectorAll('a, button')];
-
-  const closeMenu = () => {
-    mMenu.classList.remove('open');
-    mScrim.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-    mMenu.setAttribute('aria-hidden', 'true');
-    hamburger.focus();
-  };
-  const openMenu = () => {
-    mMenu.classList.add('open');
-    mScrim.classList.add('open');
-    hamburger.setAttribute('aria-expanded', 'true');
-    mMenu.setAttribute('aria-hidden', 'false');
-    const focusable = menuFocusable();
-    if (focusable.length) focusable[0].focus();
-  };
-
-  hamburger.addEventListener('click', () => {
-    if (mMenu.classList.contains('open')) closeMenu();
-    else openMenu();
+    item.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
   });
-  mScrim.addEventListener('click', closeMenu);
-  mMenu.querySelectorAll('a, .mm-cta').forEach(el => {
-    el.addEventListener('click', closeMenu);
-  });
+});
 
-  // Focus trap
-  mMenu.addEventListener('keydown', (e) => {
-    if (!mMenu.classList.contains('open')) return;
-    const els = menuFocusable();
-    const first = els[0];
-    const last = els[els.length - 1];
-    if (e.key === 'Tab') {
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-    if (e.key === 'Escape') closeMenu();
+/* ── Smooth scroll with sticky nav offset ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (href === '#') return;
+    const target = document.querySelector(href);
+    if (!target) return;
+    e.preventDefault();
+    const offset = nav.getBoundingClientRect().height;
+    window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
   });
-
-  // Sticky side-nav active state
-  const sideNav = document.getElementById('sideNav');
-  const sideLinks = sideNav.querySelectorAll('a');
-  const sectionIds = Array.from(sideLinks).map(a => a.dataset.target);
-  sideLinks.forEach(a => {
-    a.addEventListener('click', () => {
-      const t = document.getElementById(a.dataset.target);
-      if (!t) return;
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-    });
-  });
-  const setActive = () => {
-    const y = window.scrollY + window.innerHeight * 0.35;
-    let current = sectionIds[0];
-    for (const id of sectionIds) {
-      const el = document.getElementById(id);
-      if (el && el.offsetTop <= y) current = id;
-    }
-    sideLinks.forEach(a => a.classList.toggle('active', a.dataset.target === current));
-  };
-  document.addEventListener('scroll', setActive, { passive: true });
-  window.addEventListener('resize', setActive);
-  setActive();
+});
 </script>
-
 </body>
 </html>
