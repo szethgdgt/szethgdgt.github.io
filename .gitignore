@@ -4,3 +4,29 @@
 # Skills
 docs/
 skills-lock.json
+
+# Secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+.secrets*
+credentials*.json
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-*
+
+# Backups & logs
+*.bak
+*.old
+*~
+*.log
+
+# Dependencies (if tooling is ever added)
+node_modules/
